@@ -1,6 +1,9 @@
 local m = {}
 
 function m.message(channel, data)
+    data.toChannel = '1383378250'
+    data.eventType = '138311608800106203'
+
     return http.request {
 	    url = 'https://trialbot-api.line.me/v1/events',
 	    method = 'POST',
