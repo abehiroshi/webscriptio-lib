@@ -1,7 +1,7 @@
 local m = {}
 
 function m.message()
-    return "hoge"
+    return "hoge2"
 end
 
 return m
