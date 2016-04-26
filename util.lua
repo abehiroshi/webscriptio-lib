@@ -12,8 +12,8 @@ function m.urlencode(str)
     return str
 end
 
--- テーブルをキーでソートされた{key,value}の配列に変換
-function m.sortedPairs(t)
+-- テーブルをキーでソートされた{key,val}でイテレート
+function m.ipairsSorted(t)
     local kv = {}
     for k, v in pairs(t) do
     	table.insert(kv, {key=k, val=v})
