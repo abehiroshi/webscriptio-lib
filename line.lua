@@ -1,5 +1,8 @@
+-- LINE Botを使う
+
 local m = {}
 
+-- LINE Botがメッセージを送る
 function m.message(channel, data)
     data.toChannel = '1383378250'
     data.eventType = '138311608800106203'
