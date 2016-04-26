@@ -22,4 +22,13 @@ function m.ipairsSorted(t)
     return ipairs(kv)
 end
 
+-- テーブルをURLクエリ形式の文字列にする
+function m.toQuery(t)
+    local query = {}
+    for i, kv in m.ipairsSorted(t) do
+        table.insert(query, kv.key..'='..m.urlencode(kv.val or ''))
+    end
+    return table.concat(query, '&')
+end
+
 return m
