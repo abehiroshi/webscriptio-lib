@@ -1,4 +1,4 @@
-local line = require 'abehiroshi/webscriptio-lib/line'
+local line = require '../line'
 
 local m = {}
 
