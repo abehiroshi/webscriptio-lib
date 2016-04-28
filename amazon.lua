@@ -2,7 +2,6 @@
 
 local m = {}
 
-local lom = require 'lxp.lom'
 local util = require 'util'
 
 -- AmazonにHTTPリクエストを送信する
@@ -23,11 +22,10 @@ function m.request(args)
 				util.toQuery(params)),
             crypto.sha256).digest())
     
-    local response = http.request {
+    return http.request {
         url = info.protocol..'://'..info.endpoint..info.uri,
         params = params,
     }
-    return lom.parse(response.content)
 end
 
 return m
