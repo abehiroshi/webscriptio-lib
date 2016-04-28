@@ -2,7 +2,7 @@ local line = require 'abehiroshi/webscriptio-lib/line'
 
 local m = {}
 
-function m.message(){
+function m.message()
     line.message(json.parse(storage.linebot_keys or {}), {
     		to = {storage.linebot_my_mid},
     		content = {
@@ -11,6 +11,6 @@ function m.message(){
     			text = 'できた？',
     		},
     })
-}
+end
 
 return m
