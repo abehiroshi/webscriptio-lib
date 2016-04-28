@@ -6,7 +6,10 @@ local lom = require 'lxp.lom'
 local util = require 'util'
 
 -- AmazonにHTTPリクエストを送信する
-function m.request(info, params)
+function m.request(args)
+    local info = args.info
+    local params = args.params
+    
     params.AWSAccessKeyId = info.AWSAccessKeyId
     params.AssociateTag = info.AssociateTag
     params.Version = info.Version
