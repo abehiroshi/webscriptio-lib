@@ -1,4 +1,4 @@
-local line = require '../line'
+local line = require 'sandbox/../line'
 
 local m = {}
 
