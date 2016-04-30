@@ -62,8 +62,8 @@ function m.simplifyLom(x)
 			local child = m.simplifyLom(v)
 			if #v.attr > 0 then
 				if type(child) ~= 'table' then child = {value=child} end
-				child = util.reduce(v.attr, child,
-									function(c,i,val) c[val] = v.attr[val] end)
+				child = m.reduce(v.attr, child,
+							function(c,i,val) c[val] = v.attr[val] end)
 			end
 			if type(child) == 'table' then
 				local elements = result[v.tag] or {}
