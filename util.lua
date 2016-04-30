@@ -31,4 +31,14 @@ function m.toQuery(t)
     return table.concat(query, '&')
 end
 
+-- 配列を畳み込み
+function m.reduce(array, init, fn)
+	local cxt = init
+	for i,v in ipairs(array) do
+		local ret = fn(cxt, i, v)
+		if ret ~= nil then cxt = ret end
+	end
+	return cxt
+end
+
 return m
