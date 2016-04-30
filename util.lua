@@ -51,7 +51,7 @@ end
 -- lxp.lomで変換したテーブルを単純化する
 function m.simplifyLom(x)
 	if type(x) ~= 'table' then return x
-	elseif #x == 1 then return simplifyLom(x[1])
+	elseif #x == 1 then return m.simplifyLom(x[1])
 	end
 	
 	local result = {}
@@ -60,9 +60,9 @@ function m.simplifyLom(x)
 			table.insert(result, v)
 		else
 			if #v.attr == 0 then
-				result[v.tag] = simplifyLom(v)
+				result[v.tag] = m.simplifyLom(v)
 			else
-				local child = simplifyLom(v)
+				local child = m.simplifyLom(v)
 				if type(child) ~= 'table' then child = {value=child} end
 				result[v.tag] = m.reduce(v.attr, child,
 									function(c,i,val) c[val] = v.attr[val] end)
