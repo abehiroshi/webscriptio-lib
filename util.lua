@@ -59,13 +59,18 @@ function m.simplifyLom(x)
 		if not v.tag then
 			table.insert(result, v)
 		else
-			if #v.attr == 0 then
-				result[v.tag] = m.simplifyLom(v)
-			else
-				local child = m.simplifyLom(v)
+			local child = m.simplifyLom(v)
+			if #v.attr > 0 then
 				if type(child) ~= 'table' then child = {value=child} end
-				result[v.tag] = m.reduce(v.attr, child,
+				child = util.reduce(v.attr, child,
 									function(c,i,val) c[val] = v.attr[val] end)
+			end
+			if type(child) == 'table' then
+				local elements = result[v.tag] or {}
+				table.insert(elements, child)
+				result[v.tag] = elements
+			else
+				result[v.tag] = child
 			end
 		end
 	end
