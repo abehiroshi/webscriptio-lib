@@ -2,7 +2,7 @@
 
 local m = {}
 
--- URLエンコード
+-- 文字列をURLエンコード
 function m.urlencode(str)
     if str then
         str = string.gsub(str, "\n", "\r\n")
@@ -22,7 +22,7 @@ function m.ipairsSorted(t)
     return ipairs(kv)
 end
 
--- テーブルをURLクエリ形式の文字列にする
+-- テーブルのキーと値をURLクエリ文字列にする
 function m.toQuery(t)
     local query = {}
     for i, kv in m.ipairsSorted(t) do
