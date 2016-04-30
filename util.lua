@@ -2,6 +2,8 @@
 
 local m = {}
 
+local lom = require 'lxp.lom'
+
 -- 文字列をURLエンコード
 function m.urlencode(str)
     if str then
@@ -39,6 +41,35 @@ function m.reduce(array, init, fn)
 		if ret ~= nil then cxt = ret end
 	end
 	return cxt
+end
+
+-- XMLをテーブル構造にする
+function m.parseXml(xml)
+    return simplifyLom(lom.parse(xml))
+end
+
+-- lxp.lomで変換したテーブルを単純化する
+function simplifyLom(x)
+	if type(x) ~= 'table' then return x
+	elseif #x == 1 then return simplifyLom(x[1])
+	end
+	
+	local result = {}
+	for i,v in ipairs(x) do
+		if not v.tag then
+			table.insert(result, v)
+		else
+			if #v.attr == 0 then
+				result[v.tag] = simplifyLom(v)
+			else
+				local child = simplifyLom(v)
+				if type(child) ~= 'table' then child = {value=child} end
+				result[v.tag] = m.reduce(v.attr, child,
+									function(c,i,val) c[val] = v.attr[val] end)
+			end
+		end
+	end
+	return result
 end
 
 return m
