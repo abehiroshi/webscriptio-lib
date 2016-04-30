@@ -3,6 +3,7 @@
 local m = {}
 
 local lom = require 'lxp.lom'
+local xpath = require 'xpath'
 
 -- 文字列をURLエンコード
 function m.urlencode(str)
@@ -44,8 +45,12 @@ function m.reduce(array, init, fn)
 end
 
 -- XMLをテーブル構造にする
-function m.parseXml(xml)
-    return simplifyLom(lom.parse(xml))
+function m.parseXml(xml, xpathstr)
+    local t = lom.parse(xml)
+    if xpathstr then
+        t = xpath.selectNodes(t, xpathstr)
+    end
+    return simplifyLom(t)
 end
 
 -- lxp.lomで変換したテーブルを単純化する
