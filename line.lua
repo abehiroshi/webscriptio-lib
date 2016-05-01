@@ -33,7 +33,7 @@ function m.text(channel, indata)
 end
 
 -- LINE Botが画像を送る
-function m.text(channel, indata)
+function m.image(channel, indata)
 	return m.message(channel, {
 		to = indata.to,
 		content = {
