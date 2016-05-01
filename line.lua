@@ -20,4 +20,20 @@ function m.message(channel, data)
     }
 end
 
+-- LINE Botがスタンプを送る
+function m.stamp(channel, indata)
+	return m.message(channel, {
+		to = indata.to,
+		content = {
+			toType = 1,
+			contentType = 8,
+			contentMetadata = {
+				STKID = indata.STKID,
+				STKPKGID = indata.STKPKGID,
+				STKVER = indata.STKVER,
+			}
+		}
+	})
+end
+
 return m
