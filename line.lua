@@ -20,6 +20,31 @@ function m.message(channel, data)
     }
 end
 
+-- LINE Botがテキストメッセージを送る
+function m.text(channel, indata)
+	return m.message(channel, {
+		to = indata.to,
+		content = {
+			toType = 1,
+			contentType = 1,
+			text = indata.text,
+		}
+	})
+end
+
+-- LINE Botが画像を送る
+function m.text(channel, indata)
+	return m.message(channel, {
+		to = indata.to,
+		content = {
+			toType = 1,
+			contentType = 2,
+			originalContentUrl = indata.originalContentUrl or indata.imageUrl
+			previewImageUrl = indata.previewImageUrl or indata.imageUrl
+		}
+	})
+end
+
 -- LINE Botがスタンプを送る
 function m.stamp(channel, indata)
 	return m.message(channel, {
