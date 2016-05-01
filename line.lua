@@ -39,8 +39,8 @@ function m.image(channel, indata)
 		content = {
 			toType = 1,
 			contentType = 2,
-			originalContentUrl = indata.originalContentUrl or indata.imageUrl
-			previewImageUrl = indata.previewImageUrl or indata.imageUrl
+			originalContentUrl = indata.originalContentUrl or indata.imageUrl,
+			previewImageUrl = indata.previewImageUrl or indata.imageUrl,
 		}
 	})
 end
