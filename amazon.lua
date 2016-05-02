@@ -34,7 +34,7 @@ function m.itemsearch(args)
     params.Service = 'AWSECommerceService'
     params.SearchIndex = params.SearchIndex or 'All'
     params.ResponseGroup = params.ResponseGroup or 'Medium,Offers'
-    local response = amazon.request {info = info, params = params}
+    local response = m.request {info = info, params = params}
 
     local ret = {}
     -- HTTPステータスコード
