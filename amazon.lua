@@ -46,12 +46,9 @@ function m.itemsearch(args)
         return ret
     end
 
-    -- 検索結果有無
     ret.result = util.parseXml(response.content)
-    if not ret.result.Items
-        or not ret.result.Items[1]
-        or not ret.result.Items[1].Item
-        or not ret.result.Items[1].Item[1] then
+    -- 検索結果有無
+    if not (ret.result.Items and ret.result.Items[1].Item) then
         ret.error = {
             reason = 'item'
         }
@@ -63,12 +60,16 @@ function m.itemsearch(args)
         local item = {}
         table.insert(ret.Items, item)
 
-        item.Title = v.ItemAttributes[1].Title
-        item.Price = v.Offers[1].Offer[1].OfferListing[1].Price[1].FormattedPrice
         item.DetailPageURL = v.DetailPageURL
-
+        if v.ItemAttributes then item.Title = v.ItemAttributes[1].Title end
         if v.MediumImage then item.MediumImageURL = v.MediumImage[1].URL end
         if v.LargeImage then item.LargeImageURL = v.LargeImage[1].URL end
+        if v.Offers
+            and v.Offers[1].Offer
+            and v.Offers[1].Offer[1].OfferListing
+            and v.Offers[1].Offer[1].OfferListing[1].Price then
+            item.FormattedPrice = v.Offers[1].Offer[1].OfferListing[1].Price[1].FormattedPrice
+        end
     end
 
     return ret
