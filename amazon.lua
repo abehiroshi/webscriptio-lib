@@ -43,6 +43,7 @@ function m.itemsearch(args)
             reason = 'statuscode',
             statuscode = response.statuscode
         }
+        return ret
     end
 
     -- 検索結果有無
@@ -54,6 +55,7 @@ function m.itemsearch(args)
         ret.error = {
             reason = 'item'
         }
+        return ret
     end
 
     ret.Items = {}
