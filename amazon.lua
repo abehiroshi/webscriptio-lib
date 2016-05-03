@@ -28,6 +28,7 @@ function m.request(args)
     }
 end
 
+-- Amazonで商品検索する
 function m.itemsearch(args)
     local params = args.params
     params.Operation = 'ItemSearch'
