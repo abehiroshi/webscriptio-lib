@@ -20,6 +20,37 @@ function m.message(channel, data)
     }
 end
 
+-- LINE Botが複数メッセージを送る
+function m.send(channel, indata)
+	local messages = {}
+	for i,v in ipairs(indata.messages) do
+		local contentType
+		if v.contentType then contentType = v.contentType
+		elseif v.text then contentType = 1
+		elseif v.originalContentUrl then contentType = 2
+		elseif v.STKID then contentType = 8
+		end
+		table.insert(messages, {
+			contentType = contentType,
+			text = v.text,
+			originalContentUrl = v.originalContentUrl or v.imageUrl,
+			previewImageUrl = v.previewImageUrl or v.imageUrl,
+			contentMetadata = {
+				STKID = v.STKID,
+				STKPKGID = v.STKPKGID,
+				STKVER = v.STKVER,
+			},
+		})
+	end
+	
+	return m.message(channel, {
+		to = indata.to,
+		content = {
+			messages = messages,
+		}
+	})
+end
+
 -- LINE Botがテキストメッセージを送る
 function m.text(channel, indata)
 	return m.message(channel, {
