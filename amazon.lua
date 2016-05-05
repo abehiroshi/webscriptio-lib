@@ -61,6 +61,7 @@ function m.itemsearch(args)
         local item = {}
         table.insert(ret.Items, item)
 
+        item.ASIN = v.ASIN
         item.DetailPageURL = v.DetailPageURL
         if v.ItemAttributes then item.Title = v.ItemAttributes[1].Title end
         if v.MediumImage then item.MediumImageURL = v.MediumImage[1].URL end
