@@ -31,20 +31,22 @@ function m.send(channel, indata)
 		local contentType
 		if v.contentType then contentType = v.contentType
 		elseif v.text then contentType = 1
-		elseif v.originalContentUrl then contentType = 2
+		elseif v.imageUrl or v.originalContentUrl then contentType = 2
 		elseif v.STKID then contentType = 8
 		end
-		table.insert(messages, {
-			contentType = contentType,
-			text = v.text,
-			originalContentUrl = v.originalContentUrl or v.imageUrl,
-			previewImageUrl = v.previewImageUrl or v.imageUrl,
-			contentMetadata = {
-				STKID = v.STKID,
-				STKPKGID = v.STKPKGID,
-				STKVER = v.STKVER,
-			},
-		})
+		if contentType then
+			table.insert(messages, {
+				contentType = contentType,
+				text = v.text,
+				originalContentUrl = v.originalContentUrl or v.imageUrl,
+				previewImageUrl = v.previewImageUrl or v.imageUrl,
+				contentMetadata = {
+					STKID = v.STKID,
+					STKPKGID = v.STKPKGID,
+					STKVER = v.STKVER,
+				},
+			})
+		end
 	end
 	
 	return m.message(channel, {
