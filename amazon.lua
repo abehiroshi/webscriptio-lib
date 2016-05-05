@@ -67,7 +67,7 @@ function m.itemsearch(args)
         if v.ItemAttributes then item.Title = v.ItemAttributes[1].Title end
         if v.MediumImage then item.MediumImageURL = v.MediumImage[1].URL end
         if v.LargeImage then item.LargeImageURL = v.LargeImage[1].URL end
-        if v.Offers and v.Offers[1].Offer and v.Offers[1].Offer[1].OfferListing
+        if v.Offers and v.Offers[1].Offer and v.Offers[1].Offer[1].OfferListing then
             item.OfferListingId = v.Offers[1].Offer[1].OfferListing[1].OfferListingId
             if v.Offers[1].Offer[1].OfferListing[1].Price then
                 item.FormattedPrice = v.Offers[1].Offer[1].OfferListing[1].Price[1].FormattedPrice
