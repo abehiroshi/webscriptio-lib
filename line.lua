@@ -110,7 +110,7 @@ function m.rich(channel, indata)
 			contentType = 12,
 			contentMetadata = {
 				DOWNLOAD_URL = indata.DOWNLOAD_URL,
-				SPEC_REV = indata.SPEC_REV,
+				SPEC_REV = 1,
 				ALT_TEXT = indata.ALT_TEXT,
 				MARKUP_JSON = indata.MARKUP_JSON,
 			}
