@@ -2,10 +2,14 @@
 
 local m = {}
 
+local EventType = {
+	single = '138311608800106203',
+	multi  = '140177271400161403',
+}
+
 -- LINE Botがメッセージを送る
 function m.message(channel, data)
     data.toChannel = '1383378250'
-    data.eventType = '138311608800106203'
 
     return http.request {
 	    url = 'https://trialbot-api.line.me/v1/events',
@@ -44,6 +48,7 @@ function m.send(channel, indata)
 	end
 	
 	return m.message(channel, {
+		eventType = EventType.multi,
 		to = indata.to,
 		content = {
 			messages = messages,
@@ -54,6 +59,7 @@ end
 -- LINE Botがテキストメッセージを送る
 function m.text(channel, indata)
 	return m.message(channel, {
+		eventType = EventType.single,
 		to = indata.to,
 		content = {
 			toType = 1,
@@ -66,6 +72,7 @@ end
 -- LINE Botが画像を送る
 function m.image(channel, indata)
 	return m.message(channel, {
+		eventType = EventType.single,
 		to = indata.to,
 		content = {
 			toType = 1,
@@ -79,6 +86,7 @@ end
 -- LINE Botがスタンプを送る
 function m.stamp(channel, indata)
 	return m.message(channel, {
+		eventType = EventType.single,
 		to = indata.to,
 		content = {
 			toType = 1,
