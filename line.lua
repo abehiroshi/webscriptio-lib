@@ -100,4 +100,22 @@ function m.stamp(channel, indata)
 	})
 end
 
+-- LINE Botがリッチメッセージを送る
+function m.rich(channel, indata)
+	return m.message(channel, {
+		eventType = EventType.single,
+		to = indata.to,
+		content = {
+			toType = 1,
+			contentType = 12,
+			contentMetadata = {
+				DOWNLOAD_URL = indata.DOWNLOAD_URL,
+				SPEC_REV = indata.SPEC_REV,
+				ALT_TEXT = indata.ALT_TEXT,
+				MARKUP_JSON = indata.MARKUP_JSON,
+			}
+		}
+	})
+end
+
 return m
