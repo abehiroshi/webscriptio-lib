@@ -7,14 +7,17 @@ function m.queue(id, prefix)
 	local count = (prefix or '')..'queue_count_'..id
 	local store = (prefix or '')..'queue_store_'..id
 	local head = (prefix or '')..'queue_head_'..id
+	local capacity = (prefix or '')..'queue_count_'..id
+	storage[capacity] = storage[capacity] or 0
+	
 	return {
 		-- キューに追加
 		push = function(x)
 			lease.acquire(count)
 				local counter = (storage[count] or 0) + 1
 				storage[count] = counter
+				storage[store..counter] = json.stringify(x)
 			lease.release(count)
-			storage[store..counter] = json.stringify(x)
 		end,
 
 		-- キューから取り出し
@@ -59,9 +62,10 @@ function m.queue(id, prefix)
 				end
 				storage[count] = nil
 				storage[head] = nil
+			lease.release(count)
 			lease.release(head)
 		end,
-		
+
 		head = function(index)
 			local header = (storage[head] or 1) + (index or 0)
 			local ret = storage[store..header]
@@ -80,6 +84,10 @@ function m.queue(id, prefix)
 			else
 				return nil
 			end
+		end,
+		
+		setCapacity = function(n)
+			storage[capacity] = tonumber(n) or storage[capacity]
 		end,
 	}
 end
