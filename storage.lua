@@ -3,10 +3,10 @@
 local m = {}
 
 -- キューを作成
-function m.queue(id)
-	local count = 'queue_count_'..id
-	local store = 'queue_store_'..id
-	local head = 'queue_head_'..id
+function m.queue(id, prefix)
+	local count = (prefix or '')..'queue_count_'..id
+	local store = (prefix or '')..'queue_store_'..id
+	local head = (prefix or '')..'queue_head_'..id
 	return {
 		-- キューに追加
 		push = function(x)
@@ -60,7 +60,27 @@ function m.queue(id)
 				storage[count] = nil
 				storage[head] = nil
 			lease.release(head)
-		end
+		end,
+		
+		head = function(index)
+			local header = (storage[head] or 1) + (index or 0)
+			local ret = storage[store..header]
+			if ret then
+				return json.parse(ret)
+			else
+				return nil
+			end
+		end,
+		
+		last = function(index)
+			local counter = (storage[count] or 0) - (index or 0)
+			local ret = storage[store..counter]
+			if ret then
+				return json.parse(ret)
+			else
+				return nil
+			end
+		end,
 	}
 end
 
