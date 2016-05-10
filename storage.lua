@@ -11,7 +11,7 @@ function queue.push(self, x)
 
 	local counter = (storage[self.count] or 0) + 1
 	storage[self.count] = counter
-	storage[store..counter] = json.stringify(x)
+	storage[self.store..counter] = json.stringify(x)
 
 	lease.release(self.count)
 end
