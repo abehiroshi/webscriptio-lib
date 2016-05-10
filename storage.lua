@@ -2,23 +2,40 @@
 
 local m = {}
 
+-- キューの関数定義
+local queue = {}
+
+-- キューに追加
+function queue.push(self, x)
+	lease.acquire(self.count)
+
+	local counter = (storage[self.count] or 0) + 1
+	storage[self.count] = counter
+	storage[store..counter] = json.stringify(x)
+
+	lease.release(self.count)
+end
+
+
+
 -- キューを作成
 function m.queue(id, prefix)
-	local count = (prefix or '')..'queue_count_'..id
-	local store = (prefix or '')..'queue_store_'..id
-	local head = (prefix or '')..'queue_head_'..id
-	local capacity = (prefix or '')..'queue_count_'..id
+	local self = {
+		count = (prefix or '')..'queue_count_'..id,
+		store = (prefix or '')..'queue_store_'..id,
+		head = (prefix or '')..'queue_head_'..id,
+		capacity = (prefix or '')..'queue_count_'..id,
+	}
+	local count = self.count
+	local store = self.store
+	local head = self.head
+	local capacity = self.capacity
+	
 	storage[capacity] = storage[capacity] or 0
 	
 	return {
 		-- キューに追加
-		push = function(x)
-			lease.acquire(count)
-				local counter = (storage[count] or 0) + 1
-				storage[count] = counter
-				storage[store..counter] = json.stringify(x)
-			lease.release(count)
-		end,
+		push = function(x) return queue.push(self, x) end,
 
 		-- キューから取り出し
 		pop = function()
