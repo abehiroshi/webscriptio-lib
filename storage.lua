@@ -66,6 +66,7 @@ function queue.clear(self)
 	lease.release(self.head)
 end
 
+-- 先頭の要素を参照
 function queue.head(self, offset)
 	local header = (storage[self.head] or 1) + (offset or 0)
 	local ret = storage[self.store..header]
@@ -76,6 +77,7 @@ function queue.head(self, offset)
 	end
 end
 
+-- 末尾の要素を参照
 function queue.last(self, offset)
 	local counter = (storage[self.count] or 0) - (offset or 0)
 	local ret = storage[self.store..counter]
