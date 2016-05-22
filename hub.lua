@@ -22,23 +22,12 @@ end
 local hub = {}
 
 -- コマンドを実行する
-function hub.command(self, args)
-    local f = commands[args.command]
-    local ret, err = f(args.params)    
-    local event = {
-		event = 'command',
-		command = args.command,
-		params = args.params,
-		result = ret,
-		error = err,
-    }
-    self.events.push(event)
-    local listener = self.listeners[args.command]
-    if listener then
-        listener(event)
+function hub.command(self, command, run)
+    self.requests.push(command)
+    if run then
+        return self:next()
     end
-    self:notify(event, listener)
-    return not err
+    return true
 end
 
 -- イベントリスナを登録する
@@ -58,10 +47,28 @@ end
 
 -- 次のコマンドを実行する
 function hub.next(self)
-    local c = self.requests.pop()
-    if c then
-        return self:command(c)
+    local req = self.requests.pop()
+    if not req then
+        return false
     end
+    
+    local f = commands[req.command]
+    local ret, err = f(req.params)    
+    local event = {
+		event = 'command',
+		command = req.command,
+		params = req.params,
+		result = ret,
+		error = err,
+    }
+    self.events.push(event)
+    local listener = self.listeners[req.command]
+    if listener then
+        listener(event)
+    end
+    self:notify(event, listener)
+    
+    return true, not err
 end
 
 -- storageをクリアする
