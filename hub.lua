@@ -55,7 +55,6 @@ function hub.next(self)
     local f = commands[req.command]
     local ret, err = f(req.params)    
     local event = {
-		event = 'command',
 		command = req.command,
 		params = req.params,
 		result = ret,
