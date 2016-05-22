@@ -25,9 +25,9 @@ function m.message(channel, data)
 end
 
 -- LINE Botが複数メッセージを送る
-function m.send(channel, indata)
+function m.send(args)
 	local messages = {}
-	for i,v in ipairs(indata.messages) do
+	for i,v in ipairs(args.messages) do
 		local contentType
 		if v.contentType then contentType = v.contentType
 		elseif v.text then contentType = 1
@@ -49,9 +49,9 @@ function m.send(channel, indata)
 		end
 	end
 	
-	return m.message(channel, {
+	return m.message(args.info, {
 		eventType = EventType.multi,
-		to = indata.to,
+		to = args.to,
 		content = {
 			messages = messages,
 		}
