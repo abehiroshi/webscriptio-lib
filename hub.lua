@@ -25,23 +25,48 @@ local hub = {}
 function hub.command(self, args)
     local f = commands[args.command]
     local ret, err = f(args.params)    
-    self.events.push({
+    local event = {
 		event = 'command',
 		command = args.command,
 		params = args.params,
 		result = ret,
 		error = err,
-    })
-    self:notify('event')
+    }
+    self.events.push(event)
+    local listener = self.listeners[args.command]
+    if listener then
+        listener(event)
+    end
+    self:notify(event, listener)
+    return not err
+end
+
+-- イベントリスナを登録する
+function hub.on(self, command, callback)
+    if type(command) ~= 'string' then
+        return false, 'コマンド名は文字列です'
+    elseif type(callback) ~= 'function' then
+        return false, 'コールバックは関数です'
+    end
+    self.listeners[command] = callback
     return true
 end
 
--- 状態変化通知
-function hub.notify(self, name)
+-- イベントを通知する
+function hub.notify(self, event, listener)
+end
+
+-- 次のコマンドを実行する
+function hub.next(self)
+    local c = self.requests.pop()
+    if c then
+        return self:command(c)
+    end
 end
 
 -- storageをクリアする
 function hub.clear(self)
+    self.requests.clear()
     self.events.clear()
 end
 
@@ -49,6 +74,8 @@ end
 m.new = function(name, args)
     local self = args or {}
     setmetatable(self, {__index = hub})
+    self.listeners = {}
+    self.requests = store.queue('hub_requests_'..name)
     self.events = store.queue('hub_events_'..name)
     return self
 end
