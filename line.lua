@@ -48,6 +48,11 @@ function m.send(args)
 			})
 		end
 	end
+
+	local to = args.to
+	if type(to) = 'string' then
+		to = {to}
+	end
 	
 	return m.message(args.info, {
 		eventType = EventType.multi,
