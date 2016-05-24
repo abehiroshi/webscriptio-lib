@@ -3,13 +3,13 @@
 local m = {}
 
 local hub = require 'hub'
-local amazon = require 'amazon'
-local line = require 'line'
+setmetatable(m, {__index = hub})
 
 -- コマンド
 local command = {}
 
 -- Amazon商品検索
+local amazon = require 'amazon'
 function command.amazon_itemsearch(self, args)
 	local ret = amazon.itemsearch {
 		info = self.amazon_info,
@@ -19,13 +19,14 @@ function command.amazon_itemsearch(self, args)
 end
 
 -- Line送信
+local line = require 'line'
 function command.line(self, args)
 	args.info = self.line_info
 	line.send(args)
 end
 
 -- hubにコマンドを登録する
-function m.add(commands)
+function m.require(commands)
     if type(commands) == 'string' then
         commands = {commands}
     end
