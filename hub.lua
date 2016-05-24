@@ -4,20 +4,6 @@ local m = {}
 
 local store = require 'storage'
 
--- コマンド
-local commands = {}
-
--- コマンドを追加
-function m.add_command(name, f)
-    if type(name) ~= 'string' then
-        return false, 'コマンド名は文字列です'
-    elseif type(f) ~= 'function' then
-        return false, 'コマンドは関数です'
-    end
-    commands[name] = f
-    return true
-end
-
 -- ハブ
 local hub = {}
 
@@ -52,8 +38,9 @@ function hub.next(self)
         return false
     end
     
-    local f = commands[req.command]
-    local ret, err = f(req.params)    
+    local f = self[req.command] or (function() return 'コマンドがありません', true end)
+    local ret, err = f(self, req.params)
+    
     local event = {
 		command = req.command,
 		params = req.params,
@@ -85,5 +72,22 @@ m.new = function(name, args)
     self.events = store.queue('hub_events_'..name)
     return self
 end
+
+
+-- ハブで実行可能なコマンド
+local commands = {}
+setmetatable(hub, {__index = commands})
+
+-- コマンドを追加
+function m.add_command(name, f)
+    if type(name) ~= 'string' then
+        return false, 'コマンド名は文字列です'
+    elseif type(f) ~= 'function' then
+        return false, 'コマンドは関数です'
+    end
+    commands[name] = f
+    return true
+end
+
 
 return m
