@@ -3,13 +3,14 @@
 local m = {}
 
 local hub = require 'hub'
+local amazon = require 'amazon'
+local line = require 'line'
 
 -- コマンド
 local command = {}
 
 -- Amazon商品検索
 function command.amazon_itemsearch(self, args)
-	local amazon = require 'amazon'
 	local ret = amazon.itemsearch {
 		info = self.amazon_info,
 		params = {Keywords = args},
@@ -19,7 +20,6 @@ end
 
 -- Line送信
 function command.line(self, args)
-	local line = require 'line'
 	args.info = self.line_info
 	line.send(args)
 end
