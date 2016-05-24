@@ -8,12 +8,11 @@ local store = require 'storage'
 local hub = {}
 
 -- コマンドを実行する
-function hub.command(self, command, run)
-    self.requests.push(command)
+function hub.command(self, command, params, run)
+    self.requests.push({command = command, params = params})
     if run then
-        return self:next()
+        while self:next() do end
     end
-    return true
 end
 
 -- イベントリスナを登録する
