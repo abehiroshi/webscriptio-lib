@@ -27,7 +27,7 @@ end
 -- LINE Botが複数メッセージを送る
 function m.send(args)
 	local messages = {}
-	for i,v in ipairs(args.messages) do
+	for i,v in ipairs(args.messages or {args}) do
 		local contentType
 		if v.contentType then contentType = v.contentType
 		elseif v.text then contentType = 1
