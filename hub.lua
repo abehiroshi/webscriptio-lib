@@ -49,10 +49,11 @@ function hub.next(self)
     }
     self.events.push(event)
     local listener = self.listeners[req.command]
+    local ret_listener
     if listener then
-        listener(event)
+        ret_listener = listener(self, event)
     end
-    self:notify(event, listener)
+    self:notify(event, listener, ret_listener)
     
     return true, not err
 end
