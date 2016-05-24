@@ -50,7 +50,7 @@ function m.send(args)
 	end
 
 	local to = args.to
-	if type(to) = 'string' then
+	if type(to) == 'string' then
 		to = {to}
 	end
 	
