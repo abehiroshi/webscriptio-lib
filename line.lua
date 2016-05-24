@@ -56,7 +56,7 @@ function m.send(args)
 	
 	return m.message(args.info, {
 		eventType = EventType.multi,
-		to = args.to,
+		to = to,
 		content = {
 			messages = messages,
 		}
