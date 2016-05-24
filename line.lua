@@ -21,7 +21,7 @@ function m.message(channel, data)
 	    	['X-Line-Trusted-User-With-ACL'] = channel.mid,
 	    },
 	    data = json.stringify(data),
-    }
+    }, data
 end
 
 -- LINE Botが複数メッセージを送る
