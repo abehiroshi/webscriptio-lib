@@ -4,18 +4,6 @@ local m = {}
 
 local hub = require 'hub'
 
--- hubにコマンドを登録する
-function m.add(commands)
-    if type(commands) == 'string' then
-        commands = {commands}
-    end
-    for i,v in ipairs(commands) do
-        if command[v] then
-            hub.add_command(v, command[v])
-        end
-    end
-end
-
 -- コマンド
 local command = {}
 
@@ -34,6 +22,18 @@ function command.line(self, args)
 	local line = require 'line'
 	args.info = self.line_info
 	line.send(args)
+end
+
+-- hubにコマンドを登録する
+function m.add(commands)
+    if type(commands) == 'string' then
+        commands = {commands}
+    end
+    for i,v in ipairs(commands) do
+        if command[v] then
+            hub.add_command(v, command[v])
+        end
+    end
 end
 
 return m
