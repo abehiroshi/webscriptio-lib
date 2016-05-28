@@ -8,13 +8,17 @@ function metastorage(prefix, struct, hook)
 	for k,v in pairs(struct) do
 		setmetatable(v, metastorage(p..k, v, hook))
 	end
+
 	local decode = hook and hook.decode
 	local encode = hook and hook.encode
 	return {
 		__index = function(table, index)
-			local v = (struct and rawget(struct, index)) or storage[p..index]
+		    local v = rawget(struct, index)
+		    if v ~= nil then return v end
+
+			v = storage[p..index]
 			if decode then
-			    return decode(v)
+			    return decode(p..index, v)
 			else
 			    return v
 			end
@@ -23,7 +27,7 @@ function metastorage(prefix, struct, hook)
 		__newindex = function(table, index, value)
 		    local v = value
 		    if encode then
-		        v = encode(v)
+		        v = encode(p..index, v)
 	        end
 			storage[p..index] = v
 		end,
