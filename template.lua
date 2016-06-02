@@ -1,7 +1,5 @@
 -- lustacheをtableで使う
 
-local lustache = require 'lustache'
-
 local m = {}
 
 -- テンプレートにパラメータを適用する
