@@ -2,6 +2,12 @@
 
 local m = {}
 
+-- lustacheを利用できるようにする
+function m.use(lustache)
+	setmetatable(m, {__index = lustache})
+	return m
+end
+
 -- テンプレートにパラメータを適用する
 function m.apply(template, args)
 	local t
@@ -10,7 +16,7 @@ function m.apply(template, args)
 	else
 		t = template
 	end
-	return json.parse(lustache:render(t, args))
+	return json.parse(m:render(t, args))
 end
 
 return m
