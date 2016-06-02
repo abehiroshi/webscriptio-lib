@@ -15,6 +15,11 @@ function hub.command(self, command, params, run)
     end
 end
 
+-- コマンドを追加する
+function hub.push(self, args)
+    self:command(args.command, args.params, args.run)
+end
+
 -- イベントリスナを登録する
 function hub.on(self, command, callback)
     if type(command) ~= 'string' then
@@ -36,10 +41,10 @@ function hub.next(self)
     if not req then
         return false
     end
-    
+
     local f = self[req.command] or (function() return 'コマンドがありません', true end)
     local ret, err = f(self, req.params)
-    
+
     local event = {
 		command = req.command,
 		params = req.params,
@@ -53,7 +58,7 @@ function hub.next(self)
         ret_listener = listener(self, event)
     end
     self:notify(event, listener, ret_listener)
-    
+
     return true, not err
 end
 
