@@ -15,6 +15,9 @@ function command.amazon_itemsearch(self, args)
 		info = self.amazon_info,
 		params = {Keywords = args},
 	}
+	if ret and ret.result and ret.result.Items then
+	    ret.item1 = ret.result.Items[1]
+	end
 	return ret, ret.error
 end
 
