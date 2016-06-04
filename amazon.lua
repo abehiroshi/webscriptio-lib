@@ -8,7 +8,7 @@ local util = require 'util'
 function m.request(args)
     local info = args.info
     local params = args.params
-    
+
     params.AWSAccessKeyId = info.AWSAccessKeyId
     params.AssociateTag = info.AssociateTag
     params.Version = info.Version
@@ -21,7 +21,7 @@ function m.request(args)
 				info.uri.."\n"..
 				util.toQuery(params)),
             crypto.sha256).digest())
-    
+
     return http.request {
         url = info.protocol..'://'..info.endpoint..info.uri,
         params = params,
@@ -42,7 +42,7 @@ function m.itemsearch(args)
     if response.statuscode ~= 200 then
         ret.error = {
             reason = 'statuscode',
-            statuscode = response.statuscode
+            statuscode = response.statuscode,
         }
         return ret
     end
@@ -51,7 +51,8 @@ function m.itemsearch(args)
     -- 検索結果有無
     if not (ret.result.Items and ret.result.Items[1].Item) then
         ret.error = {
-            reason = 'item'
+            reason = 'itemcount',
+            itemcount = 0,
         }
         return ret
     end
