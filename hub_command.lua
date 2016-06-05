@@ -25,8 +25,8 @@ end
 local line = require 'line'
 function command.line(self, args)
 	args.info = self.line_info
-	local ret = line.send(args)
-	return ret, (ret.statuscode == 200)
+	local response, data = line.send(args)
+	return data, (ret.statuscode == 200)
 end
 
 -- hubにコマンドを登録する
