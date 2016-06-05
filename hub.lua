@@ -52,7 +52,7 @@ function hub.next(self)
 		error = err,
     }
     self.events.push(event)
-    local listener = self.listeners[req.command]
+    local listener = self.listeners[req.command] or self.default_listener
     local ret_listener
     if listener then
         ret_listener = listener(self, event)
