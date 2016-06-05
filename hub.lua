@@ -50,25 +50,28 @@ function hub.next(self)
         return false
     end
 
-    local f = self[req.command] or (function() return 'コマンドがありません', true end)
+    local f = self[req.command] or (function() return 'コマンドがありません['..req.command..']', true end)
     local ret, err = f(self, req.params)
-    local event = {
-		command = req.command,
-		params = req.params,
-		result = ret,
-		error = err,
-    }
-
-    local listener = self.listeners[req.command]
-    local ret_listener
-    if listener then
-        ret_listener = listener(self, event)
-    end
-    if not ret_listener then
-        self:default_listener(event)
-    end
+    self:fire(req.command, ret, err, req)
 
     return true, not err
+end
+
+-- イベントを発火する
+function hub.fire(self, name, result, err, request)
+    local event = {
+		name = name,
+		result = result,
+		error = err,
+		request = request,
+    }
+    local listener = self.listeners[event.name]
+    if listener then
+        if listener(self, event) then
+            return
+        end
+    end
+    self:default_listener(event)
 end
 
 -- storageをクリアする
