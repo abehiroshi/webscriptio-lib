@@ -8,16 +8,19 @@ local store = require 'storage'
 local hub = {}
 
 -- コマンドを実行する
-function hub.command(self, command, params, run)
+function hub.command(self, command, params)
     self.requests.push({command = command, params = params})
-    if run then
-        while self:next() do end
-    end
+    self:notify()
 end
 
 -- コマンドを追加する
 function hub.push(self, args)
     self:command(args.command, args.params, args.run)
+end
+
+-- コマンド追加を通知する
+function hub.notify(self)
+    while self:next() do end
 end
 
 -- イベントリスナを登録する
@@ -38,11 +41,6 @@ function hub.on_default(self, callback)
     end
     self.default_listener = callback
     return true
-end
-
--- イベントを通知する
--- イベントを通知する
-function hub.notify(self, event, listener)
 end
 
 -- 次のコマンドを実行する
@@ -67,7 +65,6 @@ function hub.next(self)
     if listener then
         ret_listener = listener(self, event)
     end
-    self:notify(event, listener, ret_listener)
 
     return true, not err
 end
@@ -80,8 +77,7 @@ end
 
 -- ハブを生成する
 m.new = function(name, args)
-    local self = args or {}
-    setmetatable(self, {__index = hub})
+    local self = setmetatable(args or {}, {__index = hub})
     self.listeners = {}
     self.requests = store.queue('hub_requests_'..name)
     self.events = store.queue('hub_events_'..name)
