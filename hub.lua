@@ -31,6 +31,16 @@ function hub.on(self, command, callback)
     return true
 end
 
+-- デフォルトのイベントリスナを登録する
+function hub.on_default(self, callback)
+    if type(callback) ~= 'function' then
+        return false, 'コールバックは関数です'
+    end
+    self.default_listener = callback
+    return true
+end
+
+-- イベントを通知する
 -- イベントを通知する
 function hub.notify(self, event, listener)
 end
