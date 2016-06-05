@@ -52,18 +52,20 @@ function hub.next(self)
 
     local f = self[req.command] or (function() return 'コマンドがありません', true end)
     local ret, err = f(self, req.params)
-
     local event = {
 		command = req.command,
 		params = req.params,
 		result = ret,
 		error = err,
     }
-    self.events.push(event)
-    local listener = self.listeners[req.command] or self.default_listener
+
+    local listener = self.listeners[req.command]
     local ret_listener
     if listener then
         ret_listener = listener(self, event)
+    end
+    if not ret_listener then
+        self:default_listener(event)
     end
 
     return true, not err
@@ -72,7 +74,6 @@ end
 -- storageをクリアする
 function hub.clear(self)
     self.requests.clear()
-    self.events.clear()
 end
 
 -- ハブを生成する
@@ -80,7 +81,6 @@ m.new = function(name, args)
     local self = setmetatable(args or {}, {__index = hub})
     self.listeners = {}
     self.requests = store.queue('hub_requests_'..name)
-    self.events = store.queue('hub_events_'..name)
     return self
 end
 
