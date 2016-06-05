@@ -10,7 +10,7 @@ local hub = {}
 -- コマンドを実行する
 function hub.command(self, command, params)
     self.requests.push({command = command, params = params})
-    self:notify()
+    self:notify(command, params)
 end
 
 -- コマンドを追加する
@@ -19,7 +19,7 @@ function hub.push(self, args)
 end
 
 -- コマンド追加を通知する
-function hub.notify(self)
+function hub.notify(self, command, params)
     while self:next() do end
 end
 
