@@ -18,7 +18,11 @@ function command.amazon_itemsearch(self, args)
 	if ret and ret.Items then
 	    ret.item1 = ret.Items[1]
 	end
-	return ret, ret.error
+	local status
+	if ret.error then
+		status = ':error'
+	end
+	return ret, status
 end
 
 -- Line送信
@@ -26,7 +30,11 @@ local line = require 'line'
 function command.line(self, args)
 	args.info = self.line_info
 	local response, data = line.send(args)
-	return data, (response.statuscode ~= 200)
+	local status
+	if response.statuscode ~= 200 then
+		status = ':error'
+	end
+	return data, status
 end
 
 -- hubにコマンドを登録する
