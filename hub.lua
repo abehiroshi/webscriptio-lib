@@ -51,18 +51,18 @@ function hub.next(self)
     end
 
     local f = self[req.command] or (function() return 'コマンドがありません['..req.command..']', true end)
-    local ret, err = f(self, req.params)
-    self:fire(req.command, ret, err, req)
+    local ret, status = f(self, req.params)
+    self:fire(req.command, ret, status, req)
 
     return true, not err
 end
 
 -- イベントを発火する
-function hub.fire(self, name, result, err, request)
+function hub.fire(self, name, result, status, request)
     local event = {
 		name = name,
 		result = result,
-		error = err,
+		status = status,
 		request = request,
     }
     local listener = self.listeners[event.name]
