@@ -54,10 +54,10 @@ end
 
 -- 文字列を切り分け
 function command.translate(self, args)
+	local result = {text = args.text}
 	for i,v in ipairs(args.patterns) do
 		matched = {string.match(args.text, v.pattern)}
 		if #matched > 0 then
-			local result = {text = text}
 			for j,s in ipairs(matched) do
 				if v.names and v.keys[j] then
 					result[v.keys[j]] = s
@@ -70,7 +70,7 @@ function command.translate(self, args)
 		end
 	end
 
-	return {text = text}, 'nomatch'
+	return result, 'nomatch'
 end
 
 -- hubにコマンドを登録する
