@@ -52,6 +52,27 @@ function command.ifttt_maker(self, args)
 	return response.content, status
 end
 
+-- 文字列を切り分け
+function command.translate(self, args)
+	for i,v in ipairs(args.patterns) do
+		matched = {string.match(args.text, v.pattern)}
+		if #matched > 0 then
+			local result = {text = text}
+			for j,s in ipairs(matched) do
+				if v.names and v.keys[j] then
+					result[v.keys[j]] = s
+				else
+					result[j] = s
+				end
+			end
+
+			return result, v.name
+		end
+	end
+
+	return {text = text}, 'nomatch'
+end
+
 -- hubにコマンドを登録する
 function m.require(commands)
     if type(commands) == 'string' then
