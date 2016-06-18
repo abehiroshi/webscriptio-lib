@@ -20,7 +20,7 @@ function command.amazon_itemsearch(self, args)
 	end
 	local status
 	if ret.error then
-		status = ':error'
+		status = 'error'
 	end
 	return ret, status
 end
@@ -32,9 +32,24 @@ function command.line(self, args)
 	local response, data = line.send(args)
 	local status
 	if response.statuscode ~= 200 then
-		status = ':error'
+		status = 'error'
 	end
 	return data, status
+end
+
+-- IFTTT送信
+local ifttt = require 'ifttt'
+function command.ifttt_maker(self, args)
+	local response = ifttt.maker {
+		key = self.ifttt_maker_key,
+		event = args.event,
+		value = args.value,
+	}
+	local status
+	if response.statuscode ~= 200 then
+		status = 'error'
+	end
+	return response.content, status
 end
 
 -- hubにコマンドを登録する
