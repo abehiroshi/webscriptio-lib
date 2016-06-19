@@ -12,11 +12,11 @@ function hub.push(self, ...)
     for i,v in ipairs{...} do
         self.requests.push(v)
     end
-    self:notify(args.command, args.params)
+    self:notify()
 end
 
 -- コマンド追加を通知する
-function hub.notify(self, command, params)
+function hub.notify(self)
     while self:next() do end
 end
 
