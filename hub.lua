@@ -9,8 +9,8 @@ local hub = {}
 
 -- コマンドを追加する
 function hub.push(self, args)
-    self.requests.push({command = command, params = params})
-    self:notify(command, params)
+    self.requests.push(args)
+    self:notify(args.command, args.params)
 end
 
 -- コマンド追加を通知する
