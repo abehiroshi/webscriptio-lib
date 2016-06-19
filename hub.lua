@@ -8,8 +8,10 @@ local store = require 'storage'
 local hub = {}
 
 -- コマンドを追加する
-function hub.push(self, args)
-    self.requests.push(args)
+function hub.push(self, ...)
+    for i,v in ipairs{...} do
+        self.requests.push(v)
+    end
     self:notify(args.command, args.params)
 end
 
