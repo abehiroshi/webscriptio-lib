@@ -7,15 +7,10 @@ local store = require 'storage'
 -- ハブ
 local hub = {}
 
--- コマンドを実行する
-function hub.command(self, command, params)
-    self.requests.push({command = command, params = params})
-    self:notify(command, params)
-end
-
 -- コマンドを追加する
 function hub.push(self, args)
-    self:command(args.command, args.params, args.run)
+    self.requests.push({command = command, params = params})
+    self:notify(command, params)
 end
 
 -- コマンド追加を通知する
