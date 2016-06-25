@@ -47,7 +47,7 @@ function hub.next(self)
         return false
     end
 
-    local f = self[req.command] or (function() return 'コマンドがありません['..req.command..']', true end)
+    local f = self[req.command] or (function() return 'コマンドがありません['..req.command..']', 'error' end)
     local ret, status = f(self, req.params)
     self:fire(req.command, ret, status, req)
 
