@@ -18,7 +18,7 @@ function command.amazon_itemsearch(self, args)
 	if ret and ret.Items then
 	    ret.item1 = ret.Items[1]
 	end
-	local status
+	local status = ''
 	if ret.error then
 		status = 'error'
 	end
@@ -30,7 +30,7 @@ local line = require 'line'
 function command.line(self, args)
 	args.info = self.line_info
 	local response, data = line.send(args)
-	local status
+	local status = ''
 	if response.statuscode ~= 200 then
 		status = 'error'
 	end
@@ -45,7 +45,7 @@ function command.ifttt_maker(self, args)
 		event = args.event,
 		value = args.value,
 	}
-	local status
+	local status = ''
 	if response.statuscode ~= 200 then
 		status = 'error'
 	end
