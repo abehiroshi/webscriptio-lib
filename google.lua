@@ -1,6 +1,7 @@
 -- Google API
 
 local m = {}
+local spreadsheet = {}
 
 -- アクセストークンを再取得する
 function m.refresh(self)
@@ -29,18 +30,37 @@ function m.files(self)
 	return json.parse(response.content)
 end
 
+-- Googleのインスタンス作成
+function m.create(keys)
+	return setmetatable(keys, {__index = m})
+end
+
 -- スプレッドシートのセルの値を取得する
-function m.get_sheet_values(self, spreadsheetid, range)
+function spreadsheet.values(self, range)
 	local response = http.request {
-		url = "https://sheets.googleapis.com/v4/spreadsheets/"..spreadsheetid.."/values/"..range,
+		url = "https://sheets.googleapis.com/v4/spreadsheets/"..self.spreadsheetid.."/values/"..range,
 		method = "GET",
-		headers = {Authorization = self.auth_token}
+		headers = {Authorization = self.auth_token},
 	}
 	return json.parse(response.content)
 end
 
-function m.create(keys)
-	return setmetatable(keys, {__index = m})
+-- スプレッドシートのセルの値を更新する
+function spreadsheet.updateBatch(self, updateCells)
+	local response = http.request {
+		url = "https://sheets.googleapis.com/v4/spreadsheets/"..self.spreadsheetid..":batchUpdate",
+		method = "POST",
+		headers = {Authorization = self.auth_token},
+		data = json.stringify({requests = {{updateCells = updateCells}}}),
+	}
+	return json.parse(response.content)
+end
+
+-- スプレッドシートのインスタンス作成
+function m.spreadsheet(self, spreadsheetid)
+	local self = json.parse(json.stringify(self))
+	self.spreadsheet = spreadsheet
+	return setmetatable(self, {__index = spreadsheet})
 end
 
 return m
