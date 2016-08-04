@@ -78,7 +78,7 @@ end
 
 -- スプレッドシートマークアップ形式データ(ssml)を読み込む
 function spreadsheet.load_ssml(self, range)
-	return parse_ssml(self:values(range))
+	return parse_ssml(self:values(range).values)
 end
 
 -- スプレッドシートのセルの値を更新する
