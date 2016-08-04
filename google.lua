@@ -57,7 +57,7 @@ function parse_ssml(values, row, col, context)
 	local rval = values[row][col+1]
 	if not rval or rval == "" then return current, row end
 
-	local right, rrow = parse(values, row, col+1)
+	local right, rrow = parse_ssml(values, row, col+1)
 	row = rrow+1
 
 	context = context or {}
@@ -73,7 +73,7 @@ function parse_ssml(values, row, col, context)
 		end
 	end
 
-	return unpack{parse(values, row, col, context)}
+	return unpack{parse_ssml(values, row, col, context)}
 end
 
 -- スプレッドシートマークアップ形式データ(ssml)を読み込む
