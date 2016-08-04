@@ -45,8 +45,44 @@ function spreadsheet.values(self, range)
 	return json.parse(response.content)
 end
 
+-- スプレッドシートマークアップ形式(ssml)を解析する
+function parse_ssml(values, row, col, context)
+	row = row or 1
+	if not values[row] then return context, row-1 end
+
+	col = col or 1
+	local current = values[row][col]
+	if not current or current == "" then return context, row end
+
+	local rval = values[row][col+1]
+	if not rval or rval == "" then return current, row end
+
+	local right, rrow = parse(values, row, col+1)
+	row = rrow+1
+
+	context = context or {}
+	if current == "-" then
+		table.insert(context, right)
+		if not (values[row] and values[row][col] == "-") then
+			return context, row-1
+		end
+	else
+		context[current] = right
+		if not (values[row] and values[row][col-1] == "") then
+			return context, row-1
+		end
+	end
+
+	return unpack{parse(values, row, col, context)}
+end
+
+-- スプレッドシートマークアップ形式データ(ssml)を読み込む
+function spreadsheet.load_ssml(self, range)
+	return parse_ssml(self:values(range))
+end
+
 -- スプレッドシートのセルの値を更新する
-function spreadsheet.updateBatch(self, updateCells)
+function spreadsheet.update(self, updateCells)
 	local response = http.request {
 		url = "https://sheets.googleapis.com/v4/spreadsheets/"..self.spreadsheetid..":batchUpdate",
 		method = "POST",
