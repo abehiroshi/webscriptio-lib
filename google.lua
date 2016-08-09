@@ -35,6 +35,16 @@ function m.create(keys)
 	return setmetatable(keys, {__index = m})
 end
 
+-- スプレッドシートを取得する
+function spreadsheet.get(self)
+	local response = http.request {
+		url = "https://sheets.googleapis.com/v4/spreadsheets/"..self.spreadsheetid,
+		method = "GET",
+		headers = {Authorization = self.auth_token},
+	}
+	return json.parse(response.content)
+end
+
 -- スプレッドシートのセルの値を取得する
 function spreadsheet.values(self, range)
 	local response = http.request {
