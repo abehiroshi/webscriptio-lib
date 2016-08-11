@@ -101,6 +101,58 @@ function spreadsheet.load_ssml(self, range)
 	return parse_ssml(self:values(range).values)
 end
 
+-- スプレッドシートマークアップ形式データ(ssml)にフォーマットする
+function format_ssml(data, rows, r, c)
+	rows = rows or {}
+	r = r or 1
+	c = c or 1
+	if type(data) ~= "table" then
+		rows[r][c] = data
+		return rows, r, c
+	end
+
+	local key = next(data)
+	if not key then return rows, r-1, c end
+
+	while #rows < r do table.insert(rows, {}) end
+	local row = rows[r]
+	while #row < c-1 do table.insert(row, "") end
+
+	local val
+	if #data > 0 then
+		row[c] = "-"
+		val = table.remove(data, key)
+	else
+		row[c] = key
+		val = data[key]
+		data[key] = nil
+	end
+
+	rows, r = format_ssml(val, rows, r, c+1)
+	return unpack{format_ssml(data, rows, r+1, c)}
+end
+
+-- スプレッドシートマークアップ形式データ(ssml)を保存する
+function spreadsheet:save_ssml(sheetname, data)
+	local rows = {}
+	for k1,v1 in pairs(format_ssml(data)) do
+		local row = {}
+		for k2,v2 in pairs(v1) do
+			table.insert(row, {{userEnteredValue = {stringValue = v2}}})
+		end
+		table.insert(rows, {values=row})
+	end
+
+	local sheet = self:sheet(sheetname)
+	self:update {
+		start = {
+			sheetId = sheet.sheetId
+		},
+		rows = rows,
+		fields = "userEnteredValue"
+	}
+end
+
 -- スプレッドシートのセルの値を更新する
 function spreadsheet:update(updateCells)
 	local response = http.request {
