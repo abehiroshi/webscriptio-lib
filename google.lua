@@ -134,6 +134,8 @@ end
 
 -- スプレッドシートマークアップ形式データ(ssml)を保存する
 function spreadsheet:save_ssml(sheetname, data)
+	data = json.parse(json.stringify(data))
+
 	local rows = {}
 	for k1,v1 in pairs(format_ssml(data)) do
 		local row = {}
