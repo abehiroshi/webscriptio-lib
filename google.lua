@@ -47,7 +47,8 @@ end
 
 -- シートのプロパティを取得する
 function spreadsheet:sheet(title)
-	for i,v in ipairs(self:get(title)) do
+	local ss = self:get()
+	for i,v in ipairs(ss.sheets) do
 		if v.properties.title == title then
 			return v.properties
 		end
