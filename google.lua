@@ -88,7 +88,7 @@ function parse_ssml(values, row, col, context)
 		end
 	else
 		context[current] = right
-		if not (values[row] and values[row][col-1] == "") then
+		if not (values[row] and (col == 1 or values[row][col-1] == "")) then
 			return context, row-1
 		end
 	end
