@@ -45,6 +45,15 @@ function spreadsheet.get(self)
 	return json.parse(response.content)
 end
 
+-- シートのプロパティを取得する
+function spreadsheet.sheet(self, title)
+	for i,v in ipairs(self:get(title)) do
+		if v.properties.title == title then
+			return v.properties
+		end
+	end
+end
+
 -- スプレッドシートのセルの値を取得する
 function spreadsheet.values(self, range)
 	local response = http.request {
