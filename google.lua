@@ -4,7 +4,7 @@ local m = {}
 local spreadsheet = {}
 
 -- アクセストークンを再取得する
-function m.refresh(self)
+function m:refresh()
 	local response = http.request {
 		url = "https://www.googleapis.com/oauth2/v4/token",
 		method = "POST",
@@ -21,7 +21,7 @@ function m.refresh(self)
 end
 
 -- ファイル一覧を取得する
-function m.files(self)
+function m:files()
 	local response = http.request {
 		url = "https://www.googleapis.com/drive/v3/files",
 		method = "GET",
@@ -36,7 +36,7 @@ function m.create(keys)
 end
 
 -- スプレッドシートを取得する
-function spreadsheet.get(self)
+function spreadsheet:get()
 	local response = http.request {
 		url = "https://sheets.googleapis.com/v4/spreadsheets/"..self.spreadsheetid,
 		method = "GET",
@@ -46,7 +46,7 @@ function spreadsheet.get(self)
 end
 
 -- シートのプロパティを取得する
-function spreadsheet.sheet(self, title)
+function spreadsheet:sheet(title)
 	for i,v in ipairs(self:get(title)) do
 		if v.properties.title == title then
 			return v.properties
@@ -55,7 +55,7 @@ function spreadsheet.sheet(self, title)
 end
 
 -- スプレッドシートのセルの値を取得する
-function spreadsheet.values(self, range)
+function spreadsheet:values(range)
 	local response = http.request {
 		url = "https://sheets.googleapis.com/v4/spreadsheets/"..self.spreadsheetid.."/values/"..range,
 		method = "GET",
@@ -101,7 +101,7 @@ function spreadsheet.load_ssml(self, range)
 end
 
 -- スプレッドシートのセルの値を更新する
-function spreadsheet.update(self, updateCells)
+function spreadsheet:update(updateCells)
 	local response = http.request {
 		url = "https://sheets.googleapis.com/v4/spreadsheets/"..self.spreadsheetid..":batchUpdate",
 		method = "POST",
@@ -112,7 +112,7 @@ function spreadsheet.update(self, updateCells)
 end
 
 -- スプレッドシートのインスタンス作成
-function m.spreadsheet(self, spreadsheetid)
+function m:spreadsheet(spreadsheetid)
 	local self = json.parse(json.stringify(self))
 	self.spreadsheet = spreadsheet
 	return setmetatable(self, {__index = spreadsheet})
