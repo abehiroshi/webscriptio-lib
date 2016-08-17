@@ -66,39 +66,46 @@ function spreadsheet:values(range)
 end
 
 -- スプレッドシートマークアップ形式(ssml)を解析する
-function parse_ssml(values, row, col, context)
-	row = row or 1
-	if not values[row] then return context, row-1 end
+function parse_ssml(values, row, col)
+	if values[row] == nil then
+		return "", row
+	end
 
-	col = col or 1
-	local current = values[row][col]
-	if not current or current == "" then return context, row end
-
-	local rval = values[row][col+1]
-	if not rval or rval == "" then return current, row end
+	local current = values[row][col] or ""
+	if current == "" then
+		return "", row
+	end
 
 	local right, rrow = parse_ssml(values, row, col+1)
-	row = rrow+1
+	if right == "" then
+		return current, row
+	end
 
-	context = context or {}
+	local result = {}
 	if current == "-" then
-		table.insert(context, right)
-		if not (values[row] and values[row][col] == "-") then
-			return context, row-1
+		table.insert(result, right)
+		while values[rrow+1] and values[rrow+1][col] == "-" do
+			row = rrow+1
+			right, rrow = parse_ssml(values, row, col+1)
+			table.insert(result, right)
 		end
 	else
-		context[current] = right
-		if not (values[row] and values[row][col] ~= "" and (col == 1 or values[row][col-1] == "")) then
-			return context, row-1
+		result[current] = right
+		while values[rrow+1] and values[rrow+1][col] and values[rrow+1][col] ~= ""
+				and (col == 1 or values[rrow+1][col-1] == "") do
+			row = rrow+1
+			current = values[row][col]
+			right, rrow = parse_ssml(values, row, col+1)
+			result[current] = right
 		end
 	end
 
-	return unpack{parse_ssml(values, row, col, context)}
+	return result, rrow
 end
 
 -- スプレッドシートマークアップ形式データ(ssml)を読み込む
 function spreadsheet.load_ssml(self, range)
-	return parse_ssml(self:values(range).values)
+	return parse_ssml(self:values(range).values, 1, 1)
 end
 
 -- スプレッドシートマークアップ形式データ(ssml)にフォーマットする
