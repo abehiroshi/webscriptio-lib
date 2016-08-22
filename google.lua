@@ -185,6 +185,20 @@ function spreadsheet:save_ssml(sheetname, data)
 
 	local sheet = self:sheet(sheetname)
 	self:update {{
+		repeatCell = {
+			range = {
+				sheetId = sheet.sheetId,
+				startRowIndex = 0,
+				startColumnIndex = 0,
+				endRowIndex = sheet.gridProperties.rowCount,
+				endColumnIndex = sheet.gridProperties.columnCount,
+			},
+			cell = {
+				userEnteredValue = {stringValue = ""}
+			},
+			fields = "userEnteredValue",
+		}
+	},{
 		updateCells = {
 			start = {
 				sheetId = sheet.sheetId
