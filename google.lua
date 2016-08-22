@@ -153,22 +153,24 @@ function spreadsheet:save_ssml(sheetname, data)
 	end
 
 	local sheet = self:sheet(sheetname)
-	self:update {
-		start = {
-			sheetId = sheet.sheetId
-		},
-		rows = rows,
-		fields = "userEnteredValue"
-	}
+	self:update {{
+		updateCells = {
+			start = {
+				sheetId = sheet.sheetId
+			},
+			rows = rows,
+			fields = "userEnteredValue"
+		}
+	}}
 end
 
--- スプレッドシートのセルの値を更新する
-function spreadsheet:update(updateCells)
+-- スプレッドシートのセルを更新する
+function spreadsheet:update(requests)
 	local response = http.request {
 		url = "https://sheets.googleapis.com/v4/spreadsheets/"..self.spreadsheetid..":batchUpdate",
 		method = "POST",
 		headers = {Authorization = self.auth_token},
-		data = json.stringify({requests = {{updateCells = updateCells}}}),
+		data = json.stringify(requests),
 	}
 	return json.parse(response.content)
 end
