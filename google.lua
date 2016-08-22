@@ -170,7 +170,7 @@ function spreadsheet:update(requests)
 		url = "https://sheets.googleapis.com/v4/spreadsheets/"..self.spreadsheetid..":batchUpdate",
 		method = "POST",
 		headers = {Authorization = self.auth_token},
-		data = json.stringify(requests),
+		data = json.stringify({requests = requests}),
 	}
 	return json.parse(response.content)
 end
