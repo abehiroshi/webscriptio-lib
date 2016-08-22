@@ -65,6 +65,37 @@ function spreadsheet:values(range)
 	return json.parse(response.content)
 end
 
+-- スプレッドシートのセルを更新する
+function spreadsheet:update(requests)
+	local response = http.request {
+		url = "https://sheets.googleapis.com/v4/spreadsheets/"..self.spreadsheetid..":batchUpdate",
+		method = "POST",
+		headers = {Authorization = self.auth_token},
+		data = json.stringify({requests = requests}),
+	}
+	return json.parse(response.content)
+end
+
+-- スプレッドシートのセルを全てクリアする
+function spreadsheet:clear(sheetname)
+	local sheet = self:sheet(sheetname)
+	self:update {{
+		repeatCell = {
+			range = {
+				sheetId = sheet.sheetId,
+				startRowIndex = 0,
+				startColumnIndex = 0,
+				endRowIndex = sheet.gridProperties.rowCount,
+				endColumnIndex = sheet.gridProperties.columnCount,
+			},
+			cell = {
+				userEnteredValue = {stringValue = ""}
+			},
+			fields = "userEnteredValue",
+		}
+	}}
+end
+
 -- スプレッドシートマークアップ形式(ssml)を解析する
 function parse_ssml(values, row, col)
 	if values[row] == nil then
@@ -162,17 +193,6 @@ function spreadsheet:save_ssml(sheetname, data)
 			fields = "userEnteredValue"
 		}
 	}}
-end
-
--- スプレッドシートのセルを更新する
-function spreadsheet:update(requests)
-	local response = http.request {
-		url = "https://sheets.googleapis.com/v4/spreadsheets/"..self.spreadsheetid..":batchUpdate",
-		method = "POST",
-		headers = {Authorization = self.auth_token},
-		data = json.stringify({requests = requests}),
-	}
-	return json.parse(response.content)
 end
 
 -- スプレッドシートのインスタンス作成
