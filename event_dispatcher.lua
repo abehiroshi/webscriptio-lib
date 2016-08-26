@@ -1,5 +1,6 @@
 -- Event dispatcher
 
+local m = {}
 local logger = function() end
 
 local template = require 'abehiroshi/webscriptio-lib/template'
