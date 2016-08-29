@@ -3,10 +3,11 @@
 local m = {}
 local logger = function() end
 
-local template = require 'abehiroshi/webscriptio-lib/template'
-local memory = require 'abehiroshi/webscriptio-lib/memory'
-local hub = require 'abehiroshi/webscriptio-lib/hub_command'
+local template = require 'template'
+local memory = require 'memory'
+local hub = require 'hub_command'
 
+-- hubのdefault関数作成
 function hub_default(memory_name)
 	local mem = memory.create(memory_name)
 
@@ -31,10 +32,12 @@ function hub_default(memory_name)
 	end
 end
 
+-- ロガーを設定
 function m.use_logger(_logger)
     logger = _logger
 end
 
+-- luatacheを使用する
 function m.use_luatache(...)
     template = template.use(...)
 end
