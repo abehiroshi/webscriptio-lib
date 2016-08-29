@@ -5,8 +5,31 @@ local logger = function() end
 
 local template = require 'template'
 local memory = require 'memory'
-local hub = require 'hub_command'
+local hub = require 'hub'
 require 'hub_amazon'
+require 'hub_line'
+require 'hub_ifttt'
+
+-- hub登録：文字列を切り分け変換
+hub.add_command('translate', function(self, args)
+	local result = {text = args.text}
+	for i,v in ipairs(args.patterns) do
+		matched = {string.match(args.text, v.pattern)}
+		if #matched > 0 then
+			for j,s in ipairs(matched) do
+				if v.names and v.keys[j] then
+					result[v.keys[j]] = s
+				else
+					result[j] = s
+				end
+			end
+
+			return result, v.name
+		end
+	end
+
+	return result, 'nomatch'
+end)
 
 -- hubのdefault関数作成
 function hub_default(memory_name)
@@ -41,10 +64,6 @@ end
 -- luatacheを使用する
 function m.use_luatache(...)
     template = template.use(...)
-end
-
-function m.hub_require(...)
-	hub.require(...)
 end
 
 function m.create(name, self)
