@@ -6,6 +6,7 @@ local logger = function() end
 local template = require 'template'
 local memory = require 'memory'
 local hub = require 'hub_command'
+require 'hub_amazon'
 
 -- hubのdefault関数作成
 function hub_default(memory_name)
