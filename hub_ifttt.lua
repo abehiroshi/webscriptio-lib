@@ -13,6 +13,6 @@ hub.add_command('ifttt_maker', function(self, args)
 		status = 'error'
 	end
 	return response.content, status
-end
+end)
 
 return hub
