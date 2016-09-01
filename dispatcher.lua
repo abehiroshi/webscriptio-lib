@@ -62,7 +62,7 @@ function m.use_luatache(...)
     template = template.use(...)
 end
 
-function m.create(self)
+function m.create(name, self)
 	self.context = self.context or {}
 	self.listeners = self.listeners or {}
 	local h = hub.new(name, self)
