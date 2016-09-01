@@ -32,27 +32,23 @@ hub.add_command('translate', function(self, args)
 end)
 
 -- hubのdefault関数作成
-function hub_default(memory_name)
-	local mem = memory.create(memory_name)
+function hub_default(self, event)
+	self.context[event.name] = event.result
+	local status = (event.status and string.format(':%s', event.status)) or ''
+	if status == ':' then status = '' end
+	local key = event.name..status
+    logger('event: '..key)
 
-	return function(self, event)
-		self.context[event.name] = event.result
-		local status = (event.status and string.format(':%s', event.status)) or ''
-		if status == ':' then status = '' end
-		local key = event.name..status
-	    logger('event: '..key)
-
-		local command = mem.data[key]
-		if command then
-			local commands = template.apply(command, {self = self,	event = event})
-			if #commands > 0 then
-				self:push(unpack(commands))
-			else
-				self:push(commands)
-			end
-	    else
-	        logger('no command: '..key)
+	local command = self.listeners[key]
+	if command then
+		local commands = template.apply(command, {self = self,	event = event})
+		if #commands > 0 then
+			self:push(unpack(commands))
+		else
+			self:push(commands)
 		end
+    else
+        logger('no command: '..key)
 	end
 end
 
@@ -66,9 +62,11 @@ function m.use_luatache(...)
     template = template.use(...)
 end
 
-function m.create(name, self)
+function m.create(self)
+	self.context = self.context or {}
+	self.listeners = self.listeners or {}
 	local h = hub.new(name, self)
-    h:on_default(hub_default(name))
+    h:on_default(hub_default)
 	return h
 end
 
