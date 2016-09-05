@@ -22,9 +22,9 @@ end
 function m:push(value)
 	self:acquire('push')
 
-	local counter = (self._memory.count or 0) + 1
-	self._memory.count = counter
-	self._memory[counter] = value
+	local counter = (self._memory.data.count or 0) + 1
+	self._memory.data.count = counter
+	self._memory.data[counter] = value
 
 	self:release('push')
 end
@@ -33,11 +33,11 @@ end
 function m:pop()
 	self:acquire('pop')
 
-	local header = self._memory.head or 1
-	local ret = self._memory[header]
+	local header = self._memory.data.head or 1
+	local ret = self._memory.data[header]
 	if ret then
-		self._memory[header] = nil
-		self._memory.head = header + 1
+		self._memory.data[header] = nil
+		self._memory.data.head = header + 1
 	else
 		-- 何もなければmemoryをクリア
     	self:acquire('push')
@@ -53,7 +53,7 @@ end
 function m:count()
     self:acquire('pop')
 	self:acquire('push')
-	local ret = (self._memory.count or 0) - (self._memory.head or 1) + 1
+	local ret = (self._memory.data.count or 0) - (self._memory.data.head or 1) + 1
 	self:release('push')
     self:release('pop')
 
@@ -63,7 +63,7 @@ end
 -- memoryをクリア
 function m:_clear()
 	if self._share then
-	    self._memory.clear()
+	    self._memory:clear()
 	else
 	    self._memory = {}
 	end
@@ -80,14 +80,14 @@ end
 
 -- 先頭の要素を参照
 function m:head(offset)
-	local header = (self._memory.head or 1) + (offset or 0)
-	return self._memory[header]
+	local header = (self._memory.data.head or 1) + (offset or 0)
+	return self._memory.data[header]
 end
 
 -- 末尾の要素を参照
 function m:last(offset)
-	local counter = (self._memory.count or 0) - (offset or 0)
-	return self._memory[counter]
+	local counter = (self._memory.data.count or 0) - (offset or 0)
+	return self._memory.data[counter]
 end
 
 -- キューを作成
@@ -97,7 +97,7 @@ function m.create(name)
         local id = 'queue/'..name
         self._share = true
         self._id = id
-        self._memory = memory.create(id).data
+        self._memory = memory.create(id)
     else
         self._memory = {}
     end
