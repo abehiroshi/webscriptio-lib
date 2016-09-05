@@ -6,7 +6,7 @@ local memory = require 'memory'
 
 -- キュー操作をロック
 function m:acquire(key)
-    if self._shere then
+    if self._share then
         lease.acquire(self._id..'/'..key)
     end
 end
