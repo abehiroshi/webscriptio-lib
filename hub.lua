@@ -8,7 +8,7 @@ local store = require 'storage'
 local hub = {}
 
 -- コマンドを追加する
-function hub.push(self, ...)
+function hub:push(...)
     for i,v in ipairs{...} do
         self.requests.push(v)
     end
@@ -16,12 +16,12 @@ function hub.push(self, ...)
 end
 
 -- コマンド追加を通知する
-function hub.notify(self)
+function hub:notify()
     while self:next() do end
 end
 
 -- イベントリスナを登録する
-function hub.on(self, command, callback)
+function hub:on(command, callback)
     if type(command) ~= 'string' then
         return false, 'コマンド名は文字列です'
     elseif type(callback) ~= 'function' then
@@ -32,7 +32,7 @@ function hub.on(self, command, callback)
 end
 
 -- デフォルトのイベントリスナを登録する
-function hub.on_default(self, callback)
+function hub:on_default(callback)
     if type(callback) ~= 'function' then
         return false, 'コールバックは関数です'
     end
@@ -41,7 +41,7 @@ function hub.on_default(self, callback)
 end
 
 -- 次のコマンドを実行する
-function hub.next(self)
+function hub:next()
     local req = self.requests.pop()
     if not req then
         return false
@@ -55,7 +55,7 @@ function hub.next(self)
 end
 
 -- イベントを発火する
-function hub.fire(self, name, result, status, request)
+function hub:fire(name, result, status, request)
     local event = {
 		name = name,
 		result = result,
@@ -72,7 +72,7 @@ function hub.fire(self, name, result, status, request)
 end
 
 -- storageをクリアする
-function hub.clear(self)
+function hub:clear()
     self.requests.clear()
 end
 
