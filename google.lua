@@ -212,7 +212,7 @@ end
 -- スプレッドシートのインスタンス作成
 function m:spreadsheet(spreadsheetid)
 	local self = json.parse(json.stringify(self))
-	self.spreadsheet = spreadsheet
+	self.spreadsheetid = spreadsheetid
 	return setmetatable(self, {__index = spreadsheet})
 end
 
