@@ -65,7 +65,7 @@ end
 function m.create(name, self)
 	self._context = self.context or {}
 	self._listeners = self.listeners or {}
-	local h = hub.new(name, self)
+	local h = hub.create(name, self)
     h:on_default(hub_default)
 	return h
 end

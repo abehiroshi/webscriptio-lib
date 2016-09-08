@@ -1,14 +1,14 @@
 -- ハブ
 
-local m = {}
+-- 実行可能なコマンド
+local commands = {}
 
-local store = require 'storage'
+local m = setmetatable({}, {__index = commands})
 
--- ハブ
-local hub = {}
+local queue = require 'queue'
 
 -- コマンドを追加する
-function hub:push(...)
+function m:push(...)
     for i,v in ipairs{...} do
         self.requests.push(v)
     end
@@ -16,12 +16,12 @@ function hub:push(...)
 end
 
 -- コマンド追加を通知する
-function hub:notify()
+function m:notify()
     while self:next() do end
 end
 
 -- イベントリスナを登録する
-function hub:on(command, callback)
+function m:on(command, callback)
     if type(command) ~= 'string' then
         return false, 'コマンド名は文字列です'
     elseif type(callback) ~= 'function' then
@@ -32,7 +32,7 @@ function hub:on(command, callback)
 end
 
 -- デフォルトのイベントリスナを登録する
-function hub:on_default(callback)
+function m:on_default(callback)
     if type(callback) ~= 'function' then
         return false, 'コールバックは関数です'
     end
@@ -41,7 +41,7 @@ function hub:on_default(callback)
 end
 
 -- 次のコマンドを実行する
-function hub:next()
+function m:next()
     local req = self.requests.pop()
     if not req then
         return false
@@ -55,7 +55,7 @@ function hub:next()
 end
 
 -- イベントを発火する
-function hub:fire(name, result, status, request)
+function m:fire(name, result, status, request)
     local event = {
 		name = name,
 		result = result,
@@ -72,22 +72,17 @@ function hub:fire(name, result, status, request)
 end
 
 -- storageをクリアする
-function hub:clear()
+function m:clear()
     self.requests.clear()
 end
 
 -- ハブを生成する
-m.new = function(name, args)
-    local self = setmetatable(args or {}, {__index = hub})
+function m.create(name, args)
+    local self = setmetatable(args or {}, {__index = m})
     self.listeners = {}
-    self.requests = store.queue('hub_requests_'..name)
+    self.requests = queue.create('hub/requests/'..name)
     return self
 end
-
-
--- ハブで実行可能なコマンド
-local commands = {}
-setmetatable(hub, {__index = commands})
 
 -- コマンドを追加
 function m.add_command(name, f)
@@ -99,6 +94,5 @@ function m.add_command(name, f)
     commands[name] = f
     return true
 end
-
 
 return m
