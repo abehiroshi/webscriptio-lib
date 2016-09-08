@@ -10,7 +10,7 @@ local queue = require 'queue'
 -- コマンドを追加する
 function m:push(...)
     for i,v in ipairs{...} do
-        self.requests.push(v)
+        self.requests:push(v)
     end
     self:notify()
 end
@@ -42,7 +42,7 @@ end
 
 -- 次のコマンドを実行する
 function m:next()
-    local req = self.requests.pop()
+    local req = self.requests:pop()
     if not req then
         return false
     end
@@ -73,7 +73,7 @@ end
 
 -- storageをクリアする
 function m:clear()
-    self.requests.clear()
+    self.requests:clear()
 end
 
 -- ハブを生成する
