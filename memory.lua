@@ -40,12 +40,12 @@ function m:dump()
 		_meta = {
 			prefix = self._meta.prefix,
 			struct = self._meta.struct,
-			types = self._meta.types,
 		},
+		_types = self._types,
 		data = {},
 	}
-	for k,v in pairs(self._types) do
-		d.data[k] = self.data[k]
+	for k,v in pairs(d._types) do
+		d.data[k] = stringify.encode(self.data[k])
 	end
 	return d
 end
@@ -55,6 +55,19 @@ function m:destroy()
 	self:clear()
 	self._meta.prefix = nil
 	self._meta.struct = nil
+	self._meta = nil
+	self.data = nil
+end
+
+-- ダンプから読み込む
+function m.load(d)
+	local self = m.create(d._meta.prefix, d._meta.struct)
+	self:clear()
+
+	for k,v in pairs(d._types) do
+		self.data[k] = stringify.decode(v, d.data[k])
+	end
+	return self
 end
 
 -- 記憶を生成する
