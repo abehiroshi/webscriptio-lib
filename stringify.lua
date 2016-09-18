@@ -36,10 +36,12 @@ function convert(method, typename, value)
 	end
 end
 
+-- 文字列に変換
 function m.encode(value)
     return convert('encode', type(value), value)
 end
 
+-- 文字列から逆変換
 function m.decode(typename, value)
     return convert('decode', typename, value)
 end
