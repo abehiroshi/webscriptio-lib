@@ -53,7 +53,6 @@ function m.clear(self)
 	storage[self.storage_keys] = nil
 	self.keys = setmetatable({}, metakeys(self.storage_keys))
 
-	self._meta.struct = nil
 	self._meta.types = nil
 end
 
@@ -68,6 +67,13 @@ function m.dump(self)
 	return d
 end
 
+-- 記憶を破棄する
+function m:destroy()
+	self:clear()
+	self._meta.prefix = nil
+	self._meta.struct = nil
+end
+
 -- 記憶を生成する
 function m.create(prefix, struct)
 	local self = setmetatable({}, {__index = m})
@@ -77,6 +83,7 @@ function m.create(prefix, struct)
 	self.keys = loadkeys(self.storage_keys)
 
 	self._meta = storagify.create(prefix..'/meta')
+	self._meta.prefix = prefix
 	if type(struct) == 'table' then
 		self._meta.struct = json.parse(json.stringify(struct))
 	end
