@@ -47,11 +47,13 @@ function m:next()
         return false
     end
 
-    local f = self[req.command] or (function() return 'コマンドがありません['..req.command..']', 'error' end)
-    local ret, status = f(self, req.params)
-    self:fire(req.command, ret, status, req)
+    local f = self[req.command]
+    if f then
+        local ret, status = f(self, req.params)
+        self:fire(req.command, ret, status, req)
+    end
 
-    return true, not err
+    return true
 end
 
 -- イベントを発火する
