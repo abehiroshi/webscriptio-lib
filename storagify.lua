@@ -18,7 +18,7 @@ function metastorage(prefix, struct, hook)
 
 			v = storage[p..index]
 			if decode then
-			    return decode(p..index, v)
+			    return decode(index, v)
 			else
 			    return v
 			end
@@ -27,7 +27,7 @@ function metastorage(prefix, struct, hook)
 		__newindex = function(table, index, value)
 		    local v = value
 		    if encode then
-		        v = encode(p..index, v)
+		        v = encode(index, v)
 	        end
 			storage[p..index] = v
 		end,
