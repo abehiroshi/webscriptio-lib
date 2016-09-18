@@ -42,6 +42,7 @@ function hub_default(self, event)
 	local command = self._listeners[key]
 	if command then
 		local commands = template.apply(command, {self = self,	event = event})
+		logger('commands: '..json.stringify(commands))
 		if #commands > 0 then
 			self:push(unpack(commands))
 		else
