@@ -39,7 +39,6 @@ function m:dump()
 	local d = {
 		_meta = {
 			prefix = self._meta.prefix,
-			struct = self._meta.struct,
 		},
 		_types = self._types,
 		data = {},
@@ -54,14 +53,13 @@ end
 function m:destroy()
 	self:clear()
 	self._meta.prefix = nil
-	self._meta.struct = nil
 	self._meta = nil
 	self.data = nil
 end
 
 -- ダンプから読み込む
 function m.load(d)
-	local self = m.create(d._meta.prefix, d._meta.struct)
+	local self = m.create(d._meta.prefix)
 	self:clear()
 
 	for k,v in pairs(d._types) do
@@ -71,15 +69,12 @@ function m.load(d)
 end
 
 -- 記憶を生成する
-function m.create(prefix, struct)
+function m.create(prefix)
 	local self = setmetatable({}, {__index = m})
-	self.data = storagify.create(prefix..'/data', struct, hook(self))
+	self.data = storagify.create(prefix..'/data', nil, hook(self))
 
 	self._meta = storagify.create(prefix..'/meta')
 	self._meta.prefix = prefix
-	if type(struct) == 'table' then
-		self._meta.struct = json.parse(json.stringify(struct))
-	end
 
 	self._types = json.parse(self._meta.types or '{}')
 
