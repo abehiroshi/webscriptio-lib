@@ -3,44 +3,27 @@
 local m = {}
 
 local storagify = require 'storagify'
-
--- 型変換用の関数
-local converter = {
-	table = {
-		encode = json.stringify,
-		decode = json.parse,
-	},
-	number = {
-		decode = tonumber,
-	},
-	boolean = {
-		decode = function(b)
-			return b == 'true'
-		end,
-	}
-}
+local stringify = require 'stringify'
 
 -- storageアクセス時の型変換フック
 function hook(self)
 	return {
 		decode = function(index, value)
-			local c = converter[self.keys[index]]
-			if c and c.decode then
-				return c.decode(value)
-			else
-				return value
-			end
+			return stringify.decode(self.keys[index], value)
 		end,
 
 		encode = function(index, value)
-			local t = type(value)
-			local c = converter[t]
-			self.keys[index] = t
-			if c and c.encode then
-				return c.encode(value)
+			self.keys[index] = type(value)
+
+			local types = json.parse(self._meta.data.types or '{}')
+			if value == nil then
+				types[index] = nil
 			else
-				return value
+				types[index] = type(value)
 			end
+			self._meta.data.types = json.stringify(types)
+
+			return stringify.encode(value)
 		end,
 	}
 end
@@ -69,6 +52,9 @@ function m.clear(self)
 	end
 	storage[self.storage_keys] = nil
 	self.keys = setmetatable({}, metakeys(self.storage_keys))
+
+	self._meta.data.prefix = nil
+	self._meta.data.struct = nil
 end
 
 -- 記憶をダンプする
@@ -85,10 +71,16 @@ end
 -- 記憶を生成する
 function m.create(prefix, struct)
 	local self = setmetatable({}, {__index = m})
+	self.data = storagify.create(prefix..'/data', struct, hook(self))
 
 	self.storage_keys = prefix..'/keys'
 	self.keys = loadkeys(self.storage_keys)
-	self.data = storagify.create(prefix..'/data', struct, hook(self))
+
+	self._meta = storagify.create(prefix..'/meta')
+	self._meta.data.prefix = prefix
+	if type(struct) == 'table' then
+		self._meta.data.struct = json.parse(json.stringify(struct))
+	end
 
 	return self
 end
