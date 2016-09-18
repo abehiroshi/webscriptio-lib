@@ -25,10 +25,10 @@ local converters = {
 }
 
 -- 変換実行
-function convert(method, value)
+function convert(method, typename, value)
     if value == nil then return nil end
 
-	local c = converters[type(value)]
+	local c = converters[typename]
 	if c and c[method] then
 		return c[method](value)
 	else
@@ -37,11 +37,11 @@ function convert(method, value)
 end
 
 function m.encode(value)
-    return convert('encode', value)
+    return convert('encode', type(value), value)
 end
 
-function m.decode(value)
-    return convert('decode', value)
+function m.decode(typename, value)
+    return convert('decode', typename, value)
 end
 
 return m
