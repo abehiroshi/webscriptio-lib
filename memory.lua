@@ -44,7 +44,7 @@ function m:dump()
 		},
 		data = {},
 	}
-	for k,v in pairs(json.parse(self._types)) do
+	for k,v in pairs(self._types) do
 		d.data[k] = self.data[k]
 	end
 	return d
