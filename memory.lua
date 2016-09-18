@@ -34,6 +34,14 @@ function m:clear()
 	self._meta.types = nil
 end
 
+-- 記憶を破棄する
+function m:destroy()
+	self:clear()
+	self._meta.prefix = nil
+	self._meta = nil
+	self.data = nil
+end
+
 -- 記憶をダンプする
 function m:dump()
 	local d = {
@@ -44,17 +52,9 @@ function m:dump()
 		data = {},
 	}
 	for k,v in pairs(d._types) do
-		d.data[k] = stringify.encode(self.data[k])
+		d.data[k] = self.data[k]
 	end
 	return d
-end
-
--- 記憶を破棄する
-function m:destroy()
-	self:clear()
-	self._meta.prefix = nil
-	self._meta = nil
-	self.data = nil
 end
 
 -- ダンプから読み込む
@@ -63,7 +63,7 @@ function m.load(d)
 	self:clear()
 
 	for k,v in pairs(d._types) do
-		self.data[k] = stringify.decode(v, d.data[k])
+		self.data[k] = d.data[k]
 	end
 	return self
 end
