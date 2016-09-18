@@ -27,10 +27,10 @@ end
 
 -- 記憶をクリアする
 function m:clear()
-	for k,v in pairs(json.parse(self._meta.types)) do
+	for k,v in pairs(self._types) do
 		self.data[k] = nil
-		self._types[k] = nil
 	end
+	self._types = {}
 	self._meta.types = nil
 end
 
