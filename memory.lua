@@ -9,17 +9,16 @@ local stringify = require 'stringify'
 function hook(self)
 	return {
 		decode = function(index, value)
-			return stringify.decode(self._meta.types[index], value)
+			return stringify.decode(self._types[index], value)
 		end,
 
 		encode = function(index, value)
-			local types = json.parse(self._meta.types or '{}')
 			if value == nil then
-				types[index] = nil
+				self._types[index] = nil
 			else
-				types[index] = type(value)
+				self._types[index] = type(value)
 			end
-			self._meta.types = json.stringify(types)
+			self._meta.types = json.stringify(self._types)
 
 			return stringify.encode(value)
 		end,
@@ -30,6 +29,7 @@ end
 function m:clear()
 	for k,v in pairs(json.parse(self._meta.types)) do
 		self.data[k] = nil
+		self._types[k] = nil
 	end
 	self._meta.types = nil
 end
@@ -44,8 +44,8 @@ function m:dump()
 		},
 		data = {},
 	}
-	for k,v in pairs(json.parse(d._meta.types)) do
-		d[k] = self.data[k]
+	for k,v in pairs(json.parse(self._types)) do
+		d.data[k] = self.data[k]
 	end
 	return d
 end
@@ -67,6 +67,8 @@ function m.create(prefix, struct)
 	if type(struct) == 'table' then
 		self._meta.struct = json.parse(json.stringify(struct))
 	end
+
+	self._types = json.parse(self._meta.types or '{}')
 
 	return self
 end
