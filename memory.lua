@@ -15,13 +15,13 @@ function hook(self)
 		encode = function(index, value)
 			self.keys[index] = type(value)
 
-			local types = json.parse(self._meta.data.types or '{}')
+			local types = json.parse(self._meta.types or '{}')
 			if value == nil then
 				types[index] = nil
 			else
 				types[index] = type(value)
 			end
-			self._meta.data.types = json.stringify(types)
+			self._meta.types = json.stringify(types)
 
 			return stringify.encode(value)
 		end,
@@ -53,8 +53,8 @@ function m.clear(self)
 	storage[self.storage_keys] = nil
 	self.keys = setmetatable({}, metakeys(self.storage_keys))
 
-	self._meta.data.prefix = nil
-	self._meta.data.struct = nil
+	self._meta.struct = nil
+	self._meta.types = nil
 end
 
 -- 記憶をダンプする
@@ -77,9 +77,8 @@ function m.create(prefix, struct)
 	self.keys = loadkeys(self.storage_keys)
 
 	self._meta = storagify.create(prefix..'/meta')
-	self._meta.data.prefix = prefix
 	if type(struct) == 'table' then
-		self._meta.data.struct = json.parse(json.stringify(struct))
+		self._meta.struct = json.parse(json.stringify(struct))
 	end
 
 	return self
