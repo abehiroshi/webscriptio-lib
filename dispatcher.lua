@@ -23,7 +23,7 @@ hub.add_command('translate', function(self, args)
 		matched = {string.match(args.text, v.pattern)}
 		if #matched > 0 then
 			for j,s in ipairs(matched) do
-				if v.names and v.keys[j] then
+				if v.keys and v.keys[j] then
 					result[v.keys[j]] = s
 				else
 					result[j] = s
