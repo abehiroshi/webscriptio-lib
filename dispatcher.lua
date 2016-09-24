@@ -3,12 +3,18 @@
 local m = {}
 local logger = function() end
 
-local template = require 'template'
+local stringify = require 'stringify'
 local memory = require 'memory'
 local hub = require 'hub'
 require 'hub_amazon'
 require 'hub_line'
 require 'hub_ifttt'
+
+local lustache = {
+	render = function(self, str, args)
+		return str
+	end
+}
 
 -- hub登録：文字列を切り分け変換
 hub.add_command('translate', function(self, args)
@@ -41,8 +47,12 @@ function hub_default(self, event)
 
 	local command = self._listeners[key]
 	if command then
-		local commands = template.apply(command, {self = self,	event = event})
-		logger('commands: '..json.stringify(commands))
+		local commands_text = lustache:render(
+			stringify.encode(command),
+			{self = self, event = event},
+		)
+		logger('commands: '..commands_text)
+		local commands = json.parse(commands_text)
 		if #commands > 0 then
 			self:push(unpack(commands))
 		else
@@ -59,8 +69,8 @@ function m.use_logger(_logger)
 end
 
 -- luatacheを使用する
-function m.use_luatache(...)
-    template = template.use(...)
+function m.use_lustache(_lustache)
+	lustache = _lustache
 end
 
 function m.create(name, self)
