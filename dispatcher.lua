@@ -49,7 +49,7 @@ function hub_default(self, event)
 	if command then
 		local commands_text = lustache:render(
 			stringify.encode(command),
-			{self = self, event = event},
+			{self = self, event = event}
 		)
 		logger('commands: '..commands_text)
 		local commands = json.parse(commands_text)
