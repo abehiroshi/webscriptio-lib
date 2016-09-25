@@ -31,8 +31,12 @@ function m:files()
 end
 
 -- Googleのインスタンス作成
-function m.create(keys)
-	return setmetatable(keys, {__index = m})
+function m.create(keys, refresh)
+	local self = setmetatable(keys, {__index = m})
+	if refresh == true then
+		self:refresh()
+	end
+	return self
 end
 
 -- スプレッドシートを取得する
