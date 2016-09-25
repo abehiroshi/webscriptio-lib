@@ -6,13 +6,15 @@ local stringify = require 'stringify'
 
 -- IRKit Internet HTTP APIにGET messagesを送信する
 function m:receive(clear)
+	local params = {clientkey = self.clientkey}
+	if clear == true then
+		params.clear = '1'
+	end
+
 	local response = http.request {
 		url = "https://api.getirkit.com/1/messages",
 		method = "GET",
-		params = {
-			clientkey = self.clientkey,
-			clear = clear,
-		},
+		params = params,
 	}
 	response.message = json.parse(response.content)
 	return response
