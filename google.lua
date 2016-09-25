@@ -98,7 +98,7 @@ end
 
 -- スプレッドシートマークアップ形式(ssml)を解析する
 function parse_ssml(values, row, col)
-	if values[row] == nil then
+	if not values or values[row] == nil then
 		return "", row
 	end
 
