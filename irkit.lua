@@ -17,7 +17,7 @@ function m:receive(clear)
 		params = params,
 	}
 	if #response.content > 0 then
-		response.message = json.stringify(json.parse(response.content).message)
+		response.message = string.gsub(json.stringify(json.parse(response.content).message), ' ', '')
 	end
 	return response
 end
