@@ -16,7 +16,9 @@ function m:receive(clear)
 		method = "GET",
 		params = params,
 	}
-	response.message = json.parse(response.content)
+	if #response.content > 0 then
+		response.message = json.stringify(json.parse(response.content).message)
+	end
 	return response
 end
 
