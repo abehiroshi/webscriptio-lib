@@ -58,13 +58,16 @@ function m:dump()
 end
 
 -- ダンプから読み込む
-function m.load(d)
-	local self = m.create(d._meta.prefix)
+function m.load(prefix, d)
+	local self = m.create(prefix)
 	self:clear()
 
-	for k,v in pairs(d._types) do
-		self.data[k] = d.data[k]
+	if d and type(d._types) == 'table' then
+		for k,v in pairs(d._types) do
+			self.data[k] = d.data[k]
+		end
 	end
+
 	return self
 end
 
