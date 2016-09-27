@@ -10,7 +10,8 @@ hub.add_command('irkit_receive', function(self, args)
 		status = 'error'
 	end
 	if self.context and args and args.name then
-		self.context[name] = response.message
+		self.context.irkit = {}
+		self.context.irkit[name] = response.message
 	end
 	return response.message, status
 end)
