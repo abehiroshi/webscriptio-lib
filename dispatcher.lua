@@ -39,6 +39,12 @@ hub.add_command('translate', function(self, args)
 	return result, 'nomatch'
 end)
 
+-- hub登録：memoryに登録
+hub.add_command('memory', function(self, args)
+	local mem = memory.create(args.memory_name)
+	mem.data[args.name] = args.value
+end)
+
 -- hubのdefault関数作成
 function hub_default(self, event)
 	self.context[event.name] = event.result
