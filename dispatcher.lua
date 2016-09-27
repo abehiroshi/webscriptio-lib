@@ -30,6 +30,7 @@ hub.add_command('translate', function(self, args)
 				end
 			end
 
+			self.context[v.name] = result
 			return result, v.name
 		end
 	end
