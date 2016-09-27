@@ -39,7 +39,7 @@ end)
 
 -- hubのdefault関数作成
 function hub_default(self, event)
-	self._context[event.name] = event.result
+	self.context[event.name] = event.result
 	local status = (event.status and string.format(':%s', event.status)) or ''
 	if status == ':' then status = '' end
 	local key = event.name..status
@@ -74,7 +74,7 @@ function m.use_lustache(_lustache)
 end
 
 function m.create(name, self)
-	self._context = self.context or {}
+	self.context = self.context or {}
 	self._listeners = self.listeners or {}
 	local h = hub.create(name, self)
     h:on_default(hub_default)
