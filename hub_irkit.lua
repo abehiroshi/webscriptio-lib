@@ -3,7 +3,7 @@ local irkit = require 'irkit'
 
 -- IRKit受信
 hub.add_command('irkit_receive', function(self, args)
-	locat ir = irkit.create(self.irkit)
+	local ir = irkit.create(self.irkit)
 	local response = ir:receive()
 	local status = ''
 	if response.statuscode ~= 200 then
