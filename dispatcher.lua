@@ -7,8 +7,9 @@ local stringify = require 'stringify'
 local memory = require 'memory'
 local hub = require 'hub'
 require 'hub_amazon'
-require 'hub_line'
+require 'hub_irkit'
 require 'hub_ifttt'
+require 'hub_line'
 
 local lustache = {
 	render = function(self, str, args)
