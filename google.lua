@@ -119,7 +119,7 @@ function parse_ssml(values, row, col)
 	local result = {}
 	if current == "-" then
 		table.insert(result, right)
-		while values[rrow+1] and values[rrow+1][col] == "-" do
+		while values[rrow+1] and values[rrow+1][col] == "-" and values[rrow+1][col-1] == "" do
 			row = rrow+1
 			right, rrow = parse_ssml(values, row, col+1)
 			table.insert(result, right)
