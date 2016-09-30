@@ -4,11 +4,10 @@ local m = {}
 
 -- storageアクセス用オブジェクトを作成する
 function m.create(prefix, hook)
-	local self = {}
 	local p = prefix..'/'
 	local decode = hook and hook.decode
 	local encode = hook and hook.encode
-	return setmetatable(self, {
+	return setmetatable({}, {
 		__index = function(table, index)
 			local v = storage[p..index]
 			if decode then
