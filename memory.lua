@@ -44,27 +44,21 @@ end
 
 -- 記憶をダンプする
 function m:dump()
-	local d = {
-		_meta = {
-			prefix = self._meta.prefix,
-		},
-		_types = self._types,
-		data = {},
-	}
-	for k,v in pairs(d._types) do
-		d.data[k] = self.data[k]
+	local data = {}
+	for k,v in pairs(self._types) do
+		data[k] = self.data[k]
 	end
-	return d
+	return data
 end
 
 -- ダンプから読み込む
-function m.load(prefix, d)
+function m.load(prefix, data)
 	local self = m.create(prefix)
 	self:clear()
 
-	if d and type(d._types) == 'table' then
-		for k,v in pairs(d._types) do
-			self.data[k] = d.data[k]
+	if type(data) == 'table' then
+		for k,v in pairs(data) do
+			self.data[k] = data[k]
 		end
 	end
 
