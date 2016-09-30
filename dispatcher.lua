@@ -44,7 +44,9 @@ end)
 hub.add_command('memory', function(self, args)
 	logger('memory: start '..stringify.encode(args))
 	local mem = memory.create(args.memory_name)
+	logger('memory: create')
 	mem.data[args.name] = args.value
+	logger('memory: set')
 	if args.google and args.google.sheetname then
 		logger('memory: google start')
 		local g = google.create(self.google.keys, true)
