@@ -69,7 +69,12 @@ function m.create(prefix)
 	local self = setmetatable({}, {__index = m})
 	self.data = storagify.create(prefix..'/data', hook(self))
 	self._meta = storagify.create(prefix..'/meta')
-	self._types = json.parse(self._meta.types or '{}')
+
+	if type(self._meta.types) == 'table' then
+		self._types = json.parse(self._meta.types)
+	else
+		self._types = {}
+	end
 
 	return self
 end
