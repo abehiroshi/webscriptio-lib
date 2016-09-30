@@ -67,6 +67,7 @@ function hub_default(self, event)
 		)
 		logger('commands: '..commands_text)
 		local commands = json.parse(commands_text)
+		logger('#commands: '..(#commands))
 		if #commands > 0 then
 			self:push(unpack(commands))
 		else
