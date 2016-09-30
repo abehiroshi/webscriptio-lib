@@ -37,7 +37,6 @@ end
 -- 記憶を破棄する
 function m:destroy()
 	self:clear()
-	self._meta.prefix = nil
 	self._meta = nil
 	self.data = nil
 end
@@ -68,11 +67,8 @@ end
 -- 記憶を生成する
 function m.create(prefix)
 	local self = setmetatable({}, {__index = m})
-	self.data = storagify.create(prefix..'/data', nil, hook(self))
-
+	self.data = storagify.create(prefix..'/data', hook(self))
 	self._meta = storagify.create(prefix..'/meta')
-	self._meta.prefix = prefix
-
 	self._types = json.parse(self._meta.types or '{}')
 
 	return self

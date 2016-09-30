@@ -2,26 +2,19 @@
 
 local m = {}
 
--- storageアクセス用のmetatableを作成する
-function metastorage(prefix, struct, hook)
+-- storageアクセス用オブジェクトを作成する
+function m.create(prefix, hook)
+	local self = {}
 	local p = prefix..'/'
-	for k,v in pairs(struct) do
-		setmetatable(v, metastorage(p..k, v, hook))
-	end
-
 	local decode = hook and hook.decode
 	local encode = hook and hook.encode
-	return {
+	return setmetatable(self, {
 		__index = function(table, index)
-		    local v = rawget(struct, index)
-		    if v ~= nil then return v end
-
-			v = storage[p..index]
+			local v = storage[p..index]
 			if decode then
-			    return decode(index, v)
-			else
-			    return v
+			    v = decode(index, v)
 			end
+		    return v
 		end,
 
 		__newindex = function(table, index, value)
@@ -31,14 +24,7 @@ function metastorage(prefix, struct, hook)
 	        end
 			storage[p..index] = v
 		end,
-	}
-end
-
--- storageアクセス用オブジェクトを作成する
-function m.create(prefix, struct, hook)
-	local s = struct or {}
-	setmetatable(s, metastorage(prefix, s, hook))
-	return s
+	})
 end
 
 return m
