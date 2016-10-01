@@ -34,13 +34,6 @@ function m:clear()
 	self._meta.types = nil
 end
 
--- 記憶を破棄する
-function m:destroy()
-	self:clear()
-	self._meta = nil
-	self.data = nil
-end
-
 -- 記憶をダンプする
 function m:dump()
 	local data = {}
@@ -62,6 +55,19 @@ function m.load(prefix, data)
 	end
 
 	return self
+end
+
+-- 記憶を破棄する
+function m.destroy(prefix)
+	local meta = storagify.create(prefix..'/meta')
+	local status, types = pcall(json.parse, meta.types)
+	meta.types = nil
+	if status then
+		local data = storagify.create(prefix..'/data')
+		for k,v in pairs(types) do
+			data[k] = nil
+		end
+	end
 end
 
 -- 記憶を生成する
