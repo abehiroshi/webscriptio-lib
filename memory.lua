@@ -70,7 +70,7 @@ function m.create(prefix)
 	self.data = storagify.create(prefix..'/data', hook(self))
 	self._meta = storagify.create(prefix..'/meta')
 
-	if type(self._meta.types) == 'table' then
+	if type(self._meta.types) == 'string' then
 		self._types = json.parse(self._meta.types)
 	else
 		self._types = {}
