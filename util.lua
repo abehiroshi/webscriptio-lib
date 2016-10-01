@@ -53,7 +53,7 @@ function m.simplifyLom(x)
 	if type(x) ~= 'table' then return x
 	elseif #x == 1 then return m.simplifyLom(x[1])
 	end
-	
+
 	local result = {}
 	for i,v in ipairs(x) do
 		if not v.tag then
@@ -75,6 +75,32 @@ function m.simplifyLom(x)
 		end
 	end
 	return result
+end
+
+-- table_convertの内部処理：値を変換する
+function convert_value(value, converter)
+	if type(value) == 'table' then
+		return table_convert(value, converter)
+	else
+		return converter(value)
+	end
+end
+
+-- table内の値を変換する
+function m.table_convert(t, converter)
+	if type(t) ~= 'table' then return t end
+	if type(converter) ~= 'function' then return t end
+
+	if #t > 0 then
+		for i,v in ipairs(t) do
+			t[i] = convert_value(v, converter)
+		end
+	else
+		for k,v in pairs(t) do
+			t[k] = convert_value(v, converter)
+		end
+	end
+	return t
 end
 
 return m
