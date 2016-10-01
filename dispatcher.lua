@@ -3,6 +3,7 @@
 local m = {}
 local logger = function() end
 
+local util = require 'util'
 local stringify = require 'stringify'
 local memory = require 'memory'
 local google = require 'google'
@@ -57,6 +58,17 @@ hub.add_command('memory', function(self, args)
 	logger('memory: end')
 end)
 
+-- hub_default内部関数：テンプレートを展開する
+function command_convert(commands, args)
+	return util.table_convert(commands, function(value)
+		if type(value) == 'string' then
+			return lustache:render(value, params)
+		else
+			return value
+		end
+	end)
+end
+
 -- hubのdefault関数作成
 function hub_default(self, event)
 	self.context[event.name] = event.result
@@ -67,17 +79,18 @@ function hub_default(self, event)
 
 	local command = self._listeners[key]
 	if command then
-		local commands_text = lustache:render(
-			stringify.encode(command),
-			{self = self, event = event}
-		)
-		logger('commands: '..commands_text)
-		local commands = json.parse(commands_text)
-		logger('#commands: '..(#commands))
-		if #commands > 0 then
-			self:push(unpack(commands))
+		command = util.table_convert(command, function(value)
+			if type(value) == 'string' then
+				return lustache:render(value, {self = self, event = event})
+			else
+				return value
+			end
+		end)
+		logger('command: '..stringify(command))
+		if #command > 0 then
+			self:push(unpack(command))
 		else
-			self:push(commands)
+			self:push(command)
 		end
     else
         logger('no command: '..key)
