@@ -58,17 +58,6 @@ hub.add_command('memory', function(self, args)
 	logger('memory: end')
 end)
 
--- hub_default内部関数：テンプレートを展開する
-function command_convert(commands, args)
-	return util.table_convert(commands, function(value)
-		if type(value) == 'string' then
-			return lustache:render(value, params)
-		else
-			return value
-		end
-	end)
-end
-
 -- hubのdefault関数作成
 function hub_default(self, event)
 	self.context[event.name] = event.result
