@@ -13,7 +13,7 @@ hub.add_command('irkit_receive', function(self, args)
 		self.context.irkit_receive = {}
 		self.context.irkit_receive[args.name] = response.message
 	end
-	return response.message, status
+	return response, status
 end)
 
 -- IRKit送信
@@ -24,7 +24,7 @@ hub.add_command('irkit_send', function(self, args)
 	if response.statuscode ~= 200 then
 		status = 'error'
 	end
-	return response.content, status
+	return response, status
 end)
 
 return hub
