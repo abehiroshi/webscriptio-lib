@@ -80,7 +80,7 @@ end
 -- table_convertの内部処理：値を変換する
 function convert_value(value, converter)
 	if type(value) == 'table' then
-		return table_convert(value, converter)
+		return m.table_convert(value, converter)
 	else
 		return converter(value)
 	end
