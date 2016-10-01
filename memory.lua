@@ -60,12 +60,15 @@ end
 -- 記憶を破棄する
 function m.destroy(prefix)
 	local meta = storagify.create(prefix..'/meta')
-	local status, types = pcall(json.parse, meta.types)
+	local meta_types = meta.types
 	meta.types = nil
-	if status then
-		local data = storagify.create(prefix..'/data')
-		for k,v in pairs(types) do
-			data[k] = nil
+	if type(meta_types) == 'string' then
+		local status, types = pcall(json.parse, meta_types)
+		if status then
+			local data = storagify.create(prefix..'/data')
+			for k,v in pairs(types) do
+				data[k] = nil
+			end
 		end
 	end
 end
