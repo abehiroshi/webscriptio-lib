@@ -75,7 +75,7 @@ function hub_default(self, event)
 				return value
 			end
 		end)
-		logger('command: '..stringify(command))
+		logger('command: '..stringify.encode(command))
 		if #command > 0 then
 			self:push(unpack(command))
 		else
