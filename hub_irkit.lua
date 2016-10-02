@@ -15,7 +15,7 @@ end)
 -- IRKit送信
 hub.add_command('irkit_send', function(self, args)
 	local ir = irkit.create(self.irkit_info)
-	local response = ir:send(args.message)
+	local response = ir:send(json.parse(args.message))
 	local status = ''
 	if response.statuscode ~= 200 then
 		status = 'error'
