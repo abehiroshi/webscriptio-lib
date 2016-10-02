@@ -43,19 +43,17 @@ end)
 
 -- hub登録：memoryに登録
 hub.add_command('memory', function(self, args)
-	logger('memory: start '..stringify.encode(args))
 	local mem = memory.create(args.memory_name)
-	logger('memory: create')
-	mem.data[args.name] = args.value
-	logger('memory: set')
+	if args.value ~= nil then
+		mem.data[args.name] = args.value
+	end
 	if args.google and args.google.sheetname then
-		logger('memory: google start')
 		local g = google.create(self.google_info.keys, true)
 		local sheet = g:spreadsheet(self.google_info.spreadsheetid.webscript)
 		sheet:save_ssml(args.google.sheetname, mem:dump())
-		logger('memory: google end')
 	end
-	logger('memory: end')
+
+	return {[args.name] = mem.data[args.name]}, args.memory_name.."@"..args.name
 end)
 
 -- hubのdefault関数作成
