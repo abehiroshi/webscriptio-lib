@@ -53,7 +53,7 @@ hub.add_command('memory', function(self, args)
 		sheet:save_ssml(args.google.sheetname, mem:dump())
 	end
 
-	return {value = mem.data[args.name]}, args.memory_name
+	return {value = mem.data[args.name]}, args.status
 end)
 
 -- hubのdefault関数作成
