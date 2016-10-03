@@ -53,7 +53,17 @@ hub.add_command('memory', function(self, args)
 		sheet:save_ssml(args.google.sheetname, mem:dump())
 	end
 
-	return {value = mem.data[args.name]}, args.status
+	return {value = mem.data[args.name]}, args.status or ''
+end)
+
+-- HTTPリクエストを送信
+hub.add_command('http', function(self, args)
+	local response = http.request(args)
+	local status = ''
+	if response.statuscode ~= 200 then
+		status = 'error'
+	end
+	return response.content, status
 end)
 
 -- hubのdefault関数作成
