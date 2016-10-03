@@ -49,7 +49,7 @@ hub.add_command('memory', function(self, args)
 	end
 	if args.google and args.google.sheetname then
 		local g = google.create(self.google_info.keys, true)
-		local sheet = g:spreadsheet(self.google_info.spreadsheetid.webscript)
+		local sheet = g:spreadsheet(self.google_info.spreadsheetid)
 		sheet:save_ssml(args.google.sheetname, mem:dump())
 	end
 
