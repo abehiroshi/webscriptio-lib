@@ -63,7 +63,7 @@ hub.add_command('http', function(self, args)
 	if response.statuscode ~= 200 then
 		status = 'error'
 	end
-	return response.content, status
+	return response.content, args.status or ''
 end)
 
 -- hubのdefault関数作成
