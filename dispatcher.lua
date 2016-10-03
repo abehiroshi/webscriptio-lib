@@ -58,7 +58,7 @@ end)
 
 -- HTTPリクエストを送信
 hub.add_command('http', function(self, args)
-	local response = http.request(args)
+	local response = http.request(args.request)
 	local status = ''
 	if response.statuscode ~= 200 then
 		status = 'error'
