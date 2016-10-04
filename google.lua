@@ -60,11 +60,15 @@ function spreadsheet:sheet(title)
 end
 
 -- スプレッドシートのセルの値を取得する
-function spreadsheet:values(range)
+function spreadsheet:values(range, valueRenderOption)
+	valueRenderOption = valueRenderOption or "UNFORMATTED_VALUE"
 	local response = http.request {
 		url = "https://sheets.googleapis.com/v4/spreadsheets/"..self.spreadsheetid.."/values/"..range,
 		method = "GET",
 		headers = {Authorization = self.auth_token},
+		params = {
+			valueRenderOption = valueRenderOption,
+		},
 	}
 	return json.parse(response.content)
 end
