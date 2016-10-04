@@ -182,7 +182,13 @@ function spreadsheet:save_ssml(sheetname, data)
 	for k1,v1 in pairs(format_ssml(data)) do
 		local row = {}
 		for k2,v2 in pairs(v1) do
-			table.insert(row, {{userEnteredValue = {stringValue = v2}}})
+			local value = {}
+			if type(v2) == 'number' then
+				value = {numberValue = v2}
+			else
+				value = {stringValue = v2}
+			end
+			table.insert(row, {{userEnteredValue = value}})
 		end
 		table.insert(rows, {values=row})
 	end
