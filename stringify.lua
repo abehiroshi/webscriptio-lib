@@ -5,7 +5,15 @@ local m = {}
 -- 型変換用の関数
 local converters = {
 	table = {
-		encode = json.stringify,
+		encode = function(t)
+			return string.gsub(
+				json.stringify(t),
+				'"[^"]+\\u[^"]+"',
+				function(text)
+					return '"'..json.parse(text)..'"'
+				end
+			)
+		end,
 		decode = json.parse,
 	},
 	number = {
