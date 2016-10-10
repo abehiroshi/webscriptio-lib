@@ -6,13 +6,14 @@ local m = {}
 local converters = {
 	table = {
 		encode = function(t)
-			return string.gsub(
+			local s = string.gsub(
 				json.stringify(t),
 				'"[^"]+\\u[^"]+"',
 				function(text)
 					return '"'..json.parse(text)..'"'
 				end
 			)
+			return s
 		end,
 		decode = json.parse,
 	},
