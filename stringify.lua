@@ -27,10 +27,6 @@ local converters = {
 			return b == 'true'
 		end,
 	},
-	['function'] = {
-	    encode = string.dump,
-	    decode = loadstring,
-	},
 }
 
 -- 変換実行
