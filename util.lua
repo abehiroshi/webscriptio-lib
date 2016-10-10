@@ -78,11 +78,11 @@ function m.simplifyLom(x)
 end
 
 -- table_convertの内部処理：値を変換する
-function convert_value(value, converter)
+function convert_value(converter, key, value)
 	if type(value) == 'table' then
 		return m.table_convert(value, converter)
 	else
-		return converter(value)
+		return converter(value, key)
 	end
 end
 
@@ -93,11 +93,11 @@ function m.table_convert(t, converter)
 
 	if #t > 0 then
 		for i,v in ipairs(t) do
-			t[i] = convert_value(v, converter)
+			t[i] = convert_value(converter, i, v)
 		end
 	else
 		for k,v in pairs(t) do
-			t[k] = convert_value(v, converter)
+			t[k] = convert_value(converter, k, v)
 		end
 	end
 	return t
