@@ -18,7 +18,7 @@ function hook(self)
 			else
 				self._types[index] = type(value)
 			end
-			self._meta.types = json.stringify(self._types)
+			self._meta.types = stringify.encode(self._types)
 
 			return stringify.encode(value)
 		end,
@@ -80,7 +80,7 @@ function m.create(prefix)
 	self._meta = storagify.create(prefix..'/meta')
 
 	if type(self._meta.types) == 'string' then
-		self._types = json.parse(self._meta.types)
+		self._types = stringify.decode('table', self._meta.types)
 	else
 		self._types = {}
 	end
