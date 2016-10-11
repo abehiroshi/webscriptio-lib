@@ -2,6 +2,8 @@
 
 local m = {}
 
+local stringify = require 'stringify'
+
 local EventType = {
 	single = '138311608800106203',
 	multi  = '140177271400161403',
@@ -20,7 +22,7 @@ function m.message(channel, data)
 	    	['X-Line-ChannelSecret'] = channel.secret,
 	    	['X-Line-Trusted-User-With-ACL'] = channel.mid,
 	    },
-	    data = json.stringify(data),
+	    data = stringify.encode(data),
     }, data
 end
 
@@ -37,7 +39,7 @@ function m.send(args)
 		if contentType then
 			table.insert(messages, {
 				contentType = contentType,
-				text = v.text,
+				text = stringify.encode(v.text),
 				originalContentUrl = v.originalContentUrl or v.imageUrl,
 				previewImageUrl = v.previewImageUrl or v.imageUrl,
 				contentMetadata = {
@@ -53,7 +55,7 @@ function m.send(args)
 	if type(to) == 'string' then
 		to = {to}
 	end
-	
+
 	return m.message(args.info, {
 		eventType = EventType.multi,
 		to = to,
@@ -71,7 +73,7 @@ function m.text(channel, indata)
 		content = {
 			toType = 1,
 			contentType = 1,
-			text = indata.text,
+			text = stringify.encode(indata.text),
 		}
 	})
 end
