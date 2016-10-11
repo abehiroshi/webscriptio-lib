@@ -27,6 +27,7 @@ function m.get(category)
     self.error = function(...) self.log('ERROR', ...) end
     self.info  = function(...) self.log('INFO ', ...) end
     self.debug = function(...) self.log('DEBUG', ...) end
+    return self
 end
 
 return m
