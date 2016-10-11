@@ -12,6 +12,19 @@ function m.init(fn)
     logger = fn
 end
 
+-- ログレベル
+local level_enum = {
+    ERROR = 'ERROR',
+    INFO  = 'INFO',
+    DEBUG = 'DEBUG',
+}
+local level = level_enum.ERROR
+
+-- ログレベルを設定
+function m.level(l)
+    level = level_enum[l] or level
+end
+
 -- インスタンス作成
 function m.get(category)
     category = '['..(category or '')..']'
