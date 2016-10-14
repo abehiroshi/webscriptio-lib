@@ -9,9 +9,7 @@ local logger = function() end
 
 -- ログ出力関数を初期化
 function m.init(fn)
-    if type(fn) == 'function' then
-        logger = fn
-    end
+    logger = fn
 end
 
 -- ログレベル
