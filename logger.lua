@@ -9,38 +9,48 @@ local logger = function() end
 
 -- ログ出力関数を初期化
 function m.init(fn)
-    logger = fn
+    if type(fn) == 'function' then
+        logger = fn
+    end
 end
 
 -- ログレベル
-local level_enum = {
-    ERROR = 'ERROR',
-    INFO  = 'INFO',
-    DEBUG = 'DEBUG',
+local levels = {
+    ERROR = 1,
+    INFO  = 2,
+    DEBUG = 3,
 }
-local level = level_enum.ERROR
+local level = levels.ERROR
 
 -- ログレベルを設定
 function m.level(l)
-    level = level_enum[l] or level
+    level = levels[l] or level
 end
 
 -- インスタンス作成
 function m.get(category)
-    category = '['..(category or '')..']'
-    local self = {
-        log = function(level, ...)
-            local text = os.date("![%Y/%m/%d %H:%M:%S]")..'['..level..']'..category
-            for i,v in ipairs({...}) do
-                text = text..' '..stringify.encode(v)
-            end
-            logger(text)
+    function write(level, ...)
+        local text = os.date("![%Y/%m/%d %H:%M:%S]")..'['..level..']['..(category or '')..']'
+        for i,v in ipairs({...}) do
+            text = text..' '..stringify.encode(v)
         end
+        logger(text)
+    end
+    return {
+        error = function(...)
+            write('ERROR', ...)
+        end,
+        info = function(...)
+            if level >= level_enum.INFO then
+                write('INFO ', ...)
+            end
+        end,
+        debug = function(...)
+            if level >= level_enum.DEBUG then
+                write('DEBUG', ...)
+            end
+        end,
     }
-    self.error = function(...) self.log('ERROR', ...) end
-    self.info  = function(...) self.log('INFO ', ...) end
-    self.debug = function(...) self.log('DEBUG', ...) end
-    return self
 end
 
 return m
