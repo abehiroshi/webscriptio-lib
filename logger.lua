@@ -41,12 +41,12 @@ function m.get(category)
             write('ERROR', ...)
         end,
         info = function(...)
-            if level >= level_enum.INFO then
+            if level >= levels.INFO then
                 write('INFO ', ...)
             end
         end,
         debug = function(...)
-            if level >= level_enum.DEBUG then
+            if level >= levels.DEBUG then
                 write('DEBUG', ...)
             end
         end,
