@@ -40,7 +40,9 @@ function m.get(category)
         local text = os.date("![%Y/%m/%d %H:%M:%S]")..'['.._level..']['..(category or '')..']'
         for i,v in ipairs({...}) do
             if type(v) == 'table' then
-                text = text..' '..json.stringify(v)
+                text = text..' '..json.stringify(v):gsub('\\u[0-9a-f][0-9a-f][0-9a-f][0-9a-f]', function(s)
+            		return json.parse('"'..s..'"')
+                end
             else
                 text = text..' '..tostring(v)
             end
