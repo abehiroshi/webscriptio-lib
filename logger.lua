@@ -2,8 +2,6 @@
 
 local m = {}
 
-local stringify = require 'stringify'
-
 -- ログ出力関数
 local logger = function() end
 
@@ -41,7 +39,11 @@ function m.get(category)
     function write(_level, ...)
         local text = os.date("![%Y/%m/%d %H:%M:%S]")..'['.._level..']['..(category or '')..']'
         for i,v in ipairs({...}) do
-            text = text..' '..stringify.encode(v)
+            if type(v) == 'table' then
+                text = text..' '..json.stringify(v)
+            else
+                text = text..' '..tostring(v)
+            end
         end
         logger(text)
     end
