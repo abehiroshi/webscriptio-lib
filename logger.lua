@@ -24,53 +24,47 @@ local level = {
 }
 
 -- ログレベルを設定
-function m.level(_level, _category)
+function m.level(_level, category)
     if levels[_level] then
-        level[_category or ''] = levels[_level]
+        level[category or ''] = levels[_level]
+    end
+end
+
+function judge_level(category, _level)
+    return function()
+        return (level[category] or level['']) >= _level
     end
 end
 
 -- インスタンス作成
 function m.get(category)
-    if not level[category] then
-        level[category] = level['']
-    end
-
-    function write(level, ...)
-        local text = os.date("![%Y/%m/%d %H:%M:%S]")..'['..level..']['..(category or '')..']'
+    function write(_level, ...)
+        local text = os.date("![%Y/%m/%d %H:%M:%S]")..'['.._level..']['..(category or '')..']'
         for i,v in ipairs({...}) do
             text = text..' '..stringify.encode(v)
         end
         logger(text)
     end
+    local is_info  = judge_level(category, levels.INFO)
+    local is_debug = judge_level(category, levels.DEBUG)
+    local is_trace = judge_level(category, levels.TRACE)
+
     return {
         error = function(...)
             write('ERROR', ...)
         end,
         info = function(...)
-            if level[category] >= levels.INFO then
-                write('INFO ', ...)
-            end
+            if is_info() then write('INFO ', ...) end
         end,
         debug = function(...)
-            if level[category] >= levels.DEBUG then
-                write('DEBUG', ...)
-            end
+            if is_debug() then write('DEBUG', ...) end
         end,
         trace = function(...)
-            if level[category] >= levels.TRACE then
-                write('TRACE', ...)
-            end
+            if is_trace() then write('TRACE', ...) end
         end,
-        is_info = function()
-            return level[category] >= levels.INFO
-        end,
-        is_debug = function()
-            return level[category] >= levels.DEBUG
-        end,
-        is_trace = function()
-            return level[category] >= levels.TRACE
-        end,
+        is_info = is_info,
+        is_debug = is_debug,
+        is_trace = is_trace,
     }
 end
 
