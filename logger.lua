@@ -17,16 +17,25 @@ local levels = {
     ERROR = 1,
     INFO  = 2,
     DEBUG = 3,
+    TRACE = 4,
 }
-local level = levels.ERROR
+local level = {
+    [''] = levels.ERROR
+}
 
 -- ログレベルを設定
-function m.level(l)
-    level = levels[l] or level
+function m.level(_level, _category)
+    if levels[_level] then
+        level[_category or ''] = levels[_level]
+    else
 end
 
 -- インスタンス作成
 function m.get(category)
+    if not level[category] then
+        level[category] = level['']
+    end
+
     function write(level, ...)
         local text = os.date("![%Y/%m/%d %H:%M:%S]")..'['..level..']['..(category or '')..']'
         for i,v in ipairs({...}) do
@@ -39,14 +48,28 @@ function m.get(category)
             write('ERROR', ...)
         end,
         info = function(...)
-            if level >= levels.INFO then
+            if level[category] >= levels.INFO then
                 write('INFO ', ...)
             end
         end,
         debug = function(...)
-            if level >= levels.DEBUG then
+            if level[category] >= levels.DEBUG then
                 write('DEBUG', ...)
             end
+        end,
+        trace = function(...)
+            if level[category] >= levels.TRACE then
+                write('TRACE', ...)
+            end
+        end,
+        is_info = function()
+            return level[category] >= levels.INFO
+        end,
+        is_debug = function()
+            return level[category] >= levels.DEBUG
+        end,
+        is_trace = function()
+            return level[category] >= levels.TRACE
         end,
     }
 end
