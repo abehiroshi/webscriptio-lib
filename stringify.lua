@@ -12,7 +12,12 @@ local converters = {
 			local s = json.stringify(t)
 			s = s:gsub(
 				'"[^"]+\\u[^"]+"',
-				function(text) return '"'..json.parse(text):gsub('\n','\\n'):gsub('"','\\"')..'"' end
+				function(text)
+					text = json.parse(text)
+					text = text:gsub('\n', '\\n')
+					text = text:gsub('"', '\\"')
+					return '"'..text..'"'
+				end
 			)
 			return s
 		end,
