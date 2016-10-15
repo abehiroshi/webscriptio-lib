@@ -27,7 +27,7 @@ local level = {
 function m.level(_level, _category)
     if levels[_level] then
         level[_category or ''] = levels[_level]
-    else
+    end
 end
 
 -- インスタンス作成
