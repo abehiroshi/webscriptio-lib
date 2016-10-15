@@ -1,8 +1,5 @@
 -- 文字列化
 
-local logger = (require 'logger').get('stringify')
-
-
 local m = {}
 
 -- 型変換用の関数
@@ -10,7 +7,6 @@ local converters = {
 	table = {
 		encode = function(t)
 			local s = json.stringify(t)
-			--[[
 			s = s:gsub(
 				'"[^"]+\\u[^"]+"',
 				function(text)
@@ -20,7 +16,6 @@ local converters = {
 					return '"'..text..'"'
 				end
 			)
-			]]
 			return s
 		end,
 		decode = json.parse,
