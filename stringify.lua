@@ -1,5 +1,8 @@
 -- 文字列化
 
+local logger = (require 'logger').get('stringify')
+
+
 local m = {}
 
 -- 型変換用の関数
@@ -11,7 +14,7 @@ local converters = {
 				'"[^"]+\\u[^"]+"',
 				function(text) return '"'..json.parse(text)..'"' end
 			)
-			s = s:gsub('\n','\\n')
+			s = s:gsub('\n','\\n'):gsub('"','\\"')
 			return s
 		end,
 		decode = json.parse,
