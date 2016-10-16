@@ -19,8 +19,15 @@ function m:push(value)
 end
 
 -- 全ての要素を参照するイテレータ
-function m:elements()
+function m:elements(max_count)
     local index = -1
+    if type(max_count) == 'number' and max_count > 0 then
+        local count = self._queue:count()
+        if max_count < count then
+            index = index + count - max_count
+        end
+    end
+
     return function()
         index = index + 1
         return self._queue:head(index)
