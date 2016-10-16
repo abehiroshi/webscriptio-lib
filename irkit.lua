@@ -7,6 +7,7 @@ local m = {}
 
 -- IRKit Internet HTTP APIにGET messagesを送信する
 function m:receive(clear)
+	logger.debug('receive', {clear = clear})
 	local params = {clientkey = self.clientkey}
 	if clear == true then
 		params.clear = '1'
