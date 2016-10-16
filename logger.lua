@@ -35,7 +35,7 @@ function judge_level(category, _level)
 end
 
 function writer(category)
-    return function write(_level, ...)
+    return function(_level, ...)
         local text = os.date("![%Y/%m/%d %H:%M:%S]")..'['.._level..']['..category..']'
         for i,v in ipairs({...}) do
             if type(v) == 'table' then
