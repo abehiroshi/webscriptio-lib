@@ -1,8 +1,9 @@
 -- IRKitを使う
 
-local m = {}
-
+local logger = (require 'logger')('irkit')
 local stringify = require 'stringify'
+
+local m = {}
 
 -- IRKit Internet HTTP APIにGET messagesを送信する
 function m:receive(clear)
@@ -24,7 +25,7 @@ end
 
 -- IRKit Internet HTTP APIにPOST messagesを送信する
 function m:send(message)
-	local response = http.request {
+	local request = {
 		url = "https://api.getirkit.com/1/messages",
 		method = "POST",
 		data = {
@@ -33,6 +34,9 @@ function m:send(message)
 			message = stringify.encode(message),
 		},
 	}
+	logger.info('send', request)
+	local response = http.request(request)
+	logger.info('send', response)
 	return response
 end
 
