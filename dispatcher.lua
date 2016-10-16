@@ -1,8 +1,6 @@
 -- Event dispatcher
 
-local m = {}
-local logger = function() end
-
+local logger = (require 'logger').get('dispatcher')
 local util = require 'util'
 local stringify = require 'stringify'
 local memory = require 'memory'
@@ -12,6 +10,8 @@ require 'hub_amazon'
 require 'hub_irkit'
 require 'hub_ifttt'
 require 'hub_line'
+
+local m = {}
 
 local lustache = {
 	render = function(self, str, args)
@@ -72,7 +72,7 @@ function hub_default(self, event)
 	local status = (event.status and string.format(':%s', event.status)) or ''
 	if status == ':' then status = '' end
 	local key = event.name..status
-    logger('event: '..key)
+    logger.info('event', key)
 
 	local command = self._listeners[key]
 	if command then
@@ -83,20 +83,15 @@ function hub_default(self, event)
 				return value
 			end
 		end)
-		logger('command: '..stringify.encode(command))
+		logger.debug('command', command)
 		if #command > 0 then
 			self:push(unpack(command))
 		else
 			self:push(command)
 		end
     else
-        logger('no command: '..key)
+        logger.info('no command', key)
 	end
-end
-
--- ロガーを設定
-function m.use_logger(_logger)
-    logger = _logger
 end
 
 -- luatacheを使用する
