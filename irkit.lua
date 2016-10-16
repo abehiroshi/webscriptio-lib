@@ -12,7 +12,7 @@ function m:receive(clear)
 		params.clear = '1'
 	end
 
-	local request {
+	local request = {
 		url = "https://api.getirkit.com/1/messages",
 		method = "GET",
 		params = params,
