@@ -12,11 +12,15 @@ function m:receive(clear)
 		params.clear = '1'
 	end
 
-	local response = http.request {
+	local request {
 		url = "https://api.getirkit.com/1/messages",
 		method = "GET",
 		params = params,
 	}
+	logger.info('receive', request)
+	local response = http.request(request)
+	logger.info('receive', response)
+
 	if #response.content > 0 then
 		response.message = string.gsub(json.stringify(json.parse(response.content).message), ' ', '')
 	end
