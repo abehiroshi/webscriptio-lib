@@ -34,10 +34,9 @@ function judge_level(category, _level)
     end
 end
 
--- インスタンス作成
-function m.get(category)
-    function write(_level, ...)
-        local text = os.date("![%Y/%m/%d %H:%M:%S]")..'['.._level..']['..(category or '')..']'
+function writer(category)
+    return function write(_level, ...)
+        local text = os.date("![%Y/%m/%d %H:%M:%S]")..'['.._level..']['..category..']'
         for i,v in ipairs({...}) do
             if type(v) == 'table' then
                 text = text..' '..json.stringify(v):gsub('\\u[0-9a-f][0-9a-f][0-9a-f][0-9a-f]', function(s)
@@ -49,6 +48,13 @@ function m.get(category)
         end
         logger(text)
     end
+end
+
+-- インスタンス作成
+function m.get(category)
+    category = category or ''
+
+    local write = writer(category)
     local is_info  = judge_level(category, levels.INFO)
     local is_debug = judge_level(category, levels.DEBUG)
     local is_trace = judge_level(category, levels.TRACE)
