@@ -36,7 +36,7 @@ end
 
 function writer(category)
     return function(_level, ...)
-        local text = os.date("![%Y/%m/%d %H:%M:%S]")..'['.._level..']['..category..']'
+        local text = os.date("![%Y/%m/%d %H:%M:%S]")..'['..category..']['.._level..']'
         for i,v in ipairs({...}) do
             if type(v) == 'table' then
                 text = text..' '..json.stringify(v):gsub('\\u[0-9a-f][0-9a-f][0-9a-f][0-9a-f]', function(s)
@@ -64,7 +64,7 @@ function m.get(category)
             write('ERROR', ...)
         end,
         info = function(...)
-            if is_info() then write('INFO ', ...) end
+            if is_info() then write('INFO', ...) end
         end,
         debug = function(...)
             if is_debug() then write('DEBUG', ...) end
