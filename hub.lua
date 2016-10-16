@@ -49,7 +49,7 @@ function m:next()
 
     local f = self[req.command]
     if f then
-        local ret, status = f(self, req.params)
+        local ret, status = f(self, req.params or {})
         self:fire(req.command, ret, status, req)
     end
 
