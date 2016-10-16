@@ -5,6 +5,7 @@ local util = require 'util'
 local stringify = require 'stringify'
 local memory = require 'memory'
 local google = require 'google'
+local filling = require 'filling'
 local hub = require 'hub'
 require 'hub_amazon'
 require 'hub_irkit'
@@ -12,12 +13,6 @@ require 'hub_ifttt'
 require 'hub_line'
 
 local m = {}
-
-local lustache = {
-	render = function(self, str, args)
-		return str
-	end
-}
 
 -- hub登録：文字列を切り分け変換
 hub.add_command('translate', function(self, args)
@@ -78,7 +73,7 @@ function hub_default(self, event)
 	if command then
 		command = util.table_convert(command, function(value)
 			if type(value) == 'string' then
-				return lustache:render(value, {self = self, event = event})
+				return filling.apply(value, {self = self, event = event})
 			else
 				return value
 			end
@@ -92,11 +87,6 @@ function hub_default(self, event)
     else
         logger.info('no command', key)
 	end
-end
-
--- luatacheを使用する
-function m.use_lustache(_lustache)
-	lustache = _lustache
 end
 
 function m.create(name, self)
