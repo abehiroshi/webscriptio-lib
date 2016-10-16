@@ -8,7 +8,7 @@ local filler = function(x) return x end
 -- lustacheを使用する
 function m.lustache(_lustache)
     filler = function(...)
-        return lustache:render(...)
+        return _lustache:render(...)
     end
 end
 
