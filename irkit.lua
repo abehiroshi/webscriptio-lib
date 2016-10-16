@@ -1,6 +1,6 @@
 -- IRKitを使う
 
-local logger = (require 'logger')('irkit')
+local logger = (require 'logger').get('irkit')
 local stringify = require 'stringify'
 
 local m = {}
