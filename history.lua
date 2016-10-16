@@ -23,7 +23,7 @@ function m:elements()
     local index = -1
     return function()
         index = index + 1
-        return self:head(index)
+        return self._queue:head(index)
     end
 end
 
