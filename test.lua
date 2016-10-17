@@ -1,3 +1,3 @@
 -- テスト
 
-return require 'lustache'
+log('test')
