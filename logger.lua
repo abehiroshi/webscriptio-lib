@@ -39,9 +39,12 @@ function writer(category)
         local text = os.date("![%Y/%m/%d %H:%M:%S]", os.time() + 9*60*60)..'['..category..']['.._level..']'
         for i,v in ipairs({...}) do
             if type(v) == 'table' then
-                text = text..' '..json.stringify(v):gsub('\\u[0-9a-f][0-9a-f][0-9a-f][0-9a-f]', function(s)
-            		return json.parse('"'..s..'"')
-                end)
+                text = text..' '..json.stringify(v):gsub('\\"','"'):gsub(
+                    '\\u[0-9a-f][0-9a-f][0-9a-f][0-9a-f]',
+                    function(s)
+                        return json.parse('"'..s..'"')
+                    end
+                )
             else
                 text = text..' '..tostring(v)
             end
