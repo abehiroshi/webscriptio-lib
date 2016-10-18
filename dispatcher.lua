@@ -43,8 +43,8 @@ hub.add_command('memory', function(self, args)
 		mem.data[args.name] = args.value
 	end
 	if args.google and args.google.sheetname then
-		local g = google.create(self.google_info.keys, true)
-		local sheet = g:spreadsheet(self.google_info.spreadsheetid)
+		local g = google.create(self.store.google_info.keys, true)
+		local sheet = g:spreadsheet(self.store.google_info.spreadsheetid)
 		sheet:save_ssml(args.google.sheetname, mem:dump())
 	end
 
@@ -73,7 +73,11 @@ function hub_default(self, event)
 	if command then
 		command = util.table_convert(command, function(value)
 			if type(value) == 'string' then
-				return filling.apply(value, {self = self, event = event})
+				return filling.apply(value, {
+					event = event,
+					context = self.context,
+					store = self.store,
+				})
 			else
 				return value
 			end
@@ -90,9 +94,11 @@ function hub_default(self, event)
 end
 
 function m.create(name, self)
-	self.context = self.context or {}
-	self._listeners = self.listeners or {}
-	local h = hub.create(name, self)
+	local h = hub.create(name, {
+		context = self.context or {},
+		store = self.store or {},
+		_listeners = self.listeners or {},
+	})
     h:on_default(hub_default)
 	return h
 end
