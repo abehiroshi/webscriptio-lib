@@ -4,7 +4,7 @@ local amazon = require 'amazon'
 -- Amazon商品検索
 hub.add_command('amazon_itemsearch', function(self, args)
 	local ret = amazon.itemsearch {
-		info = self.amazon_info,
+		info = self.store.amazon_info,
 		params = {Keywords = args},
 	}
 	if ret and ret.Items then
