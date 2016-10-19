@@ -35,10 +35,10 @@ function m:result()
 end
 
 -- 入口を作成する
-function m.create(name, store_name)
-    logger.info('create', name, store_name)
-    local d = dispatcher.create(name, {
-        listeners = memory.create(name).data,
+function m.create(dispatcher_name, listener_name, store_name)
+    logger.info('create', dispatcher_name, listener_name, store_name)
+    local d = dispatcher.create(dispatcher_name, {
+        listeners = memory.create(listener_name).data,
         store = memory.create(store_name).data,
         context = {},
     })
