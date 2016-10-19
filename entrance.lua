@@ -2,7 +2,7 @@
 
 -- ログ初期化
 local _logger = require 'logger'
-local logger = _logger.get('receiver')
+local logger = _logger.get('entrance')
 local history = require 'history'
 local loghistory = history.create('log')
 
