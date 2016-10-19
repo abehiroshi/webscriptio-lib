@@ -18,7 +18,7 @@ local levels = {
     TRACE = 4,
 }
 local level = {
-    [''] = levels.ERROR
+    [''] = levels.INFO
 }
 
 -- ログレベルを設定
