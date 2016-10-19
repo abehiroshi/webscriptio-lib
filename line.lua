@@ -14,13 +14,11 @@ function m.message(channel, data)
     data.toChannel = '1383378250'
 
     return http.request {
-	    url = 'https://trialbot-api.line.me/v1/events',
+    	url = 'https://api.line.me/v2/bot/message/push',
 	    method = 'POST',
 	    headers = {
 	    	['Content-Type'] = 'application/json; charset=UTF-8',
-	       	['X-Line-ChannelID'] = channel.id,
-	    	['X-Line-ChannelSecret'] = channel.secret,
-	    	['X-Line-Trusted-User-With-ACL'] = channel.mid,
+	    	['Authorization'] = 'Bearer '..channel.access_token,
 	    },
 	    data = stringify.encode(data),
     }, data
