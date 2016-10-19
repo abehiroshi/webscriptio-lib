@@ -20,11 +20,14 @@ local m = {}
 function m:entry(request)
     logger.info('entry start', request)
 
-    local result, content = pcall(json.parse, request.content)
-    if result and type(content) == 'table' then
-        logger.debug('json.parse', content)
-        request.content = content
+    if request and request.body then
+        local result, body = pcall(json.parse, request.body)
+        if result and type(body) == 'table' then
+            logger.debug('json.parse', body)
+            request.body = body
+        end
     end
+
     self._dispatcher:fire('entry', request)
 
     logger.info('entry end')
