@@ -30,6 +30,10 @@ function m:entry(request)
     logger.info('entry end')
 end
 
+function m:result()
+    return 'nothing'
+end
+
 -- 入口を作成する
 function m.create(name, store_name)
     logger.info('create', name, store_name)
