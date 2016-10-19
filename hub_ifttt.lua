@@ -4,7 +4,7 @@ local ifttt = require 'ifttt'
 -- IFTTT送信
 hub.add_command('ifttt_maker', function(self, args)
 	local response = ifttt.maker {
-		key = self.store.ifttt_maker_key,
+		key = self.store.ifttt.maker_key,
 		event = args.event,
 		value = args.value,
 	}
