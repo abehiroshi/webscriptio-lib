@@ -22,7 +22,7 @@ function m:load(sheetname)
         self:save()
     end
 
-    return self.memory.data
+    return self.memory
 end
 
 function m:save()
