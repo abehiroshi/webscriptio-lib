@@ -6,6 +6,7 @@ local stringify = require 'stringify'
 local memory = require 'memory'
 local google = require 'google'
 local filling = require 'filling'
+local http_client = require 'http_client'
 local hub = require 'hub'
 require 'hub_amazon'
 require 'hub_irkit'
@@ -43,8 +44,8 @@ hub.add_command('memory', function(self, args)
 		mem.data[args.name] = args.value
 	end
 	if args.google and args.google.sheetname then
-		local g = google.create(self.store.google_info.keys, true)
-		local sheet = g:spreadsheet(self.store.google_info.spreadsheetid)
+		local g = google.create(self.store.google.keys, true)
+		local sheet = g:spreadsheet(self.store.google.spreadsheetid)
 		sheet:save_ssml(args.google.sheetname, mem:dump())
 	end
 
@@ -53,7 +54,7 @@ end)
 
 -- HTTPリクエストを送信
 hub.add_command('http', function(self, args)
-	local response = http.request(args.request)
+	local response = http_client.request(args.request)
 	local status = ''
 	if response.statuscode ~= 200 then
 		status = 'error'
