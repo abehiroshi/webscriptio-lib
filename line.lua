@@ -1,8 +1,9 @@
 -- LINE Botを使う
 
-local m = {}
-
+local http_client = require 'http_client'
 local stringify = require 'stringify'
+
+local m = {}
 
 local EventType = {
 	single = '138311608800106203',
@@ -13,7 +14,7 @@ local EventType = {
 function m.message(channel, data)
     data.toChannel = '1383378250'
 
-    return http.request {
+    return http_client.request {
     	url = 'https://api.line.me/v2/bot/message/push',
 	    method = 'POST',
 	    headers = {
