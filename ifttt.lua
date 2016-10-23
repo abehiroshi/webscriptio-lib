@@ -1,10 +1,12 @@
 -- IFTTTを使う
 
+local http_client = require 'http_client'
+
 local m = {}
 
 -- Maker Channel にリクエストを送信する
 function m.maker(args)
-	return http.request {
+	return http_client.request {
 		url = 'https://maker.ifttt.com/trigger/'..args.event..'/with/key/'..args.key,
 		method = 'POST',
 		headers = {

@@ -1,8 +1,9 @@
 -- AmazonのAPIを使う
 
-local m = {}
-
+local http_client = require 'http_client'
 local util = require 'util'
+
+local m = {}
 
 -- AmazonにHTTPリクエストを送信する
 function m.request(args)
@@ -22,7 +23,7 @@ function m.request(args)
 				util.toQuery(params)),
             crypto.sha256).digest())
 
-    return http.request {
+    return http_client.request {
         url = info.protocol..'://'..info.endpoint..info.uri,
         params = params,
     }
