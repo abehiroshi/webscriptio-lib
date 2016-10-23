@@ -1,11 +1,13 @@
 -- Google API
 
+local http_client = require 'http_client'
+
 local m = {}
 local spreadsheet = {}
 
 -- アクセストークンを再取得する
 function m:refresh()
-	local response = http.request {
+	local response = http_client.request {
 		url = "https://www.googleapis.com/oauth2/v4/token",
 		method = "POST",
 		data = {
@@ -22,7 +24,7 @@ end
 
 -- ファイル一覧を取得する
 function m:files()
-	local response = http.request {
+	local response = http_client.request {
 		url = "https://www.googleapis.com/drive/v3/files",
 		method = "GET",
 		headers = {Authorization = self.auth_token}
@@ -41,7 +43,7 @@ end
 
 -- スプレッドシートを取得する
 function spreadsheet:get()
-	local response = http.request {
+	local response = http_client.request {
 		url = "https://sheets.googleapis.com/v4/spreadsheets/"..self.spreadsheetid,
 		method = "GET",
 		headers = {Authorization = self.auth_token},
@@ -62,7 +64,7 @@ end
 -- スプレッドシートのセルの値を取得する
 function spreadsheet:values(range, valueRenderOption)
 	valueRenderOption = valueRenderOption or "UNFORMATTED_VALUE"
-	local response = http.request {
+	local response = http_client.request {
 		url = "https://sheets.googleapis.com/v4/spreadsheets/"..self.spreadsheetid.."/values/"..range,
 		method = "GET",
 		headers = {Authorization = self.auth_token},
@@ -75,7 +77,7 @@ end
 
 -- スプレッドシートのセルを更新する
 function spreadsheet:update(requests)
-	local response = http.request {
+	local response = http_client.request {
 		url = "https://sheets.googleapis.com/v4/spreadsheets/"..self.spreadsheetid..":batchUpdate",
 		method = "POST",
 		headers = {Authorization = self.auth_token},
