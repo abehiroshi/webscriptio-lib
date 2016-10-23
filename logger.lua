@@ -3,7 +3,9 @@
 local m = {}
 
 -- ログ出力関数
-local logger = function() end
+local logger = function(text)
+    log(text)
+end
 
 -- ログ出力関数を初期化
 function m.init(fn)
