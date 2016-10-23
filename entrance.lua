@@ -28,7 +28,10 @@ function m:entry(request)
         end
     end
 
-    self._dispatcher:fire('entry', request)
+    local ok, message = pcall(self._dispatcher.fire, self._dispatcher, 'entry', request)
+    if not ok then
+        logger.error(message)
+    end
 
     logger.info('entry end')
 end
