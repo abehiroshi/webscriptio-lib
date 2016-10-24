@@ -35,11 +35,11 @@ function m:elements(max_count)
 end
 
 -- 履歴を作成
-function m.create(name)
+function m.create(name, capacity)
     local self = {}
     self._id = 'history/'..name
     self._queue = queue.create(self._id)
-    self._capacity = 100
+    self._capacity = capacity or 100
     return setmetatable(self, {__index = m})
 end
 
