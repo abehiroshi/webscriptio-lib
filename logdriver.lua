@@ -9,10 +9,13 @@ local m = {}
 function m.load(memory_name)
     local config = memory.create(memory_name).data
 
-    local loghistory = history.create('log', config.capacity)
+    local hist = history.create(
+        config.history_name or 'log',
+        config.history_capacity or 1000
+    )
     logger.init(function(text)
         log(text)
-        loghistory:push(text)
+        hist:push(text)
     end)
 
     logger.level(config.root_level)
