@@ -6,13 +6,13 @@ local m = {}
 
 function m.request(params)
     logger.info('request start', params.url)
-    logger.debug('request start', params)
-    
+    logger.trace('request start', params)
+
     local response = http.request(params)
-    
+
     logger.info('request end', response.statuscode)
-    logger.debug('request end', response)
-    
+    logger.trace('request end', response)
+
     return response
 end
 
