@@ -12,6 +12,7 @@ require 'hub_amazon'
 require 'hub_irkit'
 require 'hub_ifttt'
 require 'hub_line'
+require 'hub_memory_google'
 
 local m = {}
 
