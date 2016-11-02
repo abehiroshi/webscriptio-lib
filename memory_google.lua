@@ -1,8 +1,8 @@
 -- memoryをgoogle spreadsheetと連携
 
 local logger = (require 'logger').get('memory_google')
-local memory = require 'abehiroshi/webscriptio-lib/memory'
-local google = require 'abehiroshi/webscriptio-lib/google'
+local memory = require 'memory'
+local google = require 'google'
 
 local m = {}
 
