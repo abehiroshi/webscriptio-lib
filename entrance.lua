@@ -18,12 +18,13 @@ local m = {}
 
 -- HTTP Requestを受信
 function m:entry(request)
-    logger.info('entry start', request)
+    logger.info('entry start')
+    logger.debug('entry', request)
 
     if request and request.body then
         local result, body = pcall(json.parse, request.body)
         if result and type(body) == 'table' then
-            logger.debug('json.parse', body)
+            logger.trace('entry json.parse', body)
             request.body = body
         end
     end
@@ -34,10 +35,6 @@ function m:entry(request)
     end
 
     logger.info('entry end')
-end
-
-function m:result()
-    return 'nothing'
 end
 
 -- 入口を作成する
