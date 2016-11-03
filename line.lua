@@ -1,25 +1,36 @@
--- LINE Botを使う
+-- LINE Message APIを使う
 
+local logger = (require 'logger').get('line')
 local http_client = require 'http_client'
 local stringify = require 'stringify'
 
 local m = {}
 
--- LINE Botがメッセージを送る
-function m.message(channel, data)
+-- Message API 送信
+function m.message(access_token, message_type, data)
+	logger.trace('message', access_token)
+	logger.info('message', message_type)
+	logger.debug('message', data)
+
     return http_client.request {
-    	url = 'https://api.line.me/v2/bot/message/push',
+    	url = 'https://api.line.me/v2/bot/message/'..message_type,
 	    method = 'POST',
 	    headers = {
 	    	['Content-Type'] = 'application/json; charset=UTF-8',
-	    	['Authorization'] = 'Bearer '..channel.access_token,
+	    	['Authorization'] = 'Bearer '..access_token,
 	    },
 	    data = stringify.encode(data),
     }, data
 end
 
--- LINE Botが複数メッセージを送る
+-- メッセージを送信
 function m.send(args)
+	logger.trace('send', args)
+
+	local message_type = args.message_type
+	if not message_type and args.replyToken then message_type = 'reply' end
+	if not message_type and args.to then message_type = 'push' end
+
 	local messages = {}
 	for i,v in ipairs(args.messages or {args}) do
 		local type = 'text'
@@ -38,39 +49,15 @@ function m.send(args)
 		})
 	end
 
-	return m.message(args.info, {
-		to = args.to,
-		messages = messages,
-	})
-end
-
--- LINE Botがテキストメッセージを送る
-function m.text(channel, indata)
-	return m.message(channel, {
-		to = indata.to,
-        type = 'text',
-		text = stringify.encode(indata.text),
-	})
-end
-
--- LINE Botが画像を送る
-function m.image(channel, indata)
-	return m.message(channel, {
-		to = indata.to,
-        type = 'image',
-		originalContentUrl = indata.originalContentUrl or indata.imageUrl,
-		previewImageUrl = indata.previewImageUrl or indata.imageUrl,
-	})
-end
-
--- LINE Botがスタンプを送る
-function m.stamp(channel, indata)
-	return m.message(channel, {
-		to = indata.to,
-        type = 'sticker',
-		stickerId = indata.stickerId,
-	    packageId = indata.packageId,
-	})
+	return m.message(
+		args.access_token,
+		message_type,
+		{
+			replyToken = args.replyToken,
+			to = args.to,
+			messages = messages,
+		}
+	)
 end
 
 return m
