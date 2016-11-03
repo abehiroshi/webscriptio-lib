@@ -5,6 +5,11 @@ local util = require 'util'
 
 local m = {}
 
+-- Amazon商品画像URLをhttpsに変換
+function convertImageUrl(url)
+    return url:gsub('^http://ecx.images-amazon.com', 'https://images-na.ssl-images-amazon.com')
+end
+
 -- AmazonにHTTPリクエストを送信する
 function m.request(args)
     local info = args.info
@@ -67,8 +72,8 @@ function m.itemsearch(args)
         item.URL = 'http://amazon.jp/dp/'..v.ASIN
         item.DetailPageURL = v.DetailPageURL
         if v.ItemAttributes then item.Title = v.ItemAttributes[1].Title end
-        if v.MediumImage then item.MediumImageURL = v.MediumImage[1].URL end
-        if v.LargeImage then item.LargeImageURL = v.LargeImage[1].URL end
+        if v.MediumImage then item.MediumImageURL = convertImageUrl(v.MediumImage[1].URL) end
+        if v.LargeImage then item.LargeImageURL = convertImageUrl(v.LargeImage[1].URL) end
         if v.Offers and v.Offers[1].Offer and v.Offers[1].Offer[1].OfferListing then
             item.OfferListingId = v.Offers[1].Offer[1].OfferListing[1].OfferListingId
             if v.Offers[1].Offer[1].OfferListing[1].Price then
