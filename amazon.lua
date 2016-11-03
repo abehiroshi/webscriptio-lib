@@ -7,7 +7,7 @@ local m = {}
 
 -- Amazon商品画像URLをhttpsに変換
 function convertImageUrl(url)
-    return url:gsub('http://ecx.images-amazon.com', 'https://images-na.ssl-images-amazon.com')
+    return url:gsub('^http://ecx.images[-]amazon.com', 'https://images-na.ssl-images-amazon.com')
 end
 
 -- AmazonにHTTPリクエストを送信する
