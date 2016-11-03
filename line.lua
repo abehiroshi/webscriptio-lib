@@ -34,19 +34,25 @@ function m.send(args)
     local messages = {}
     for i,v in ipairs(args.messages or {args}) do
         local type = 'text'
-        if v.imageUrl or v.originalContentUrl then
-            type ='image'
-        elseif v.stickerId then
-            type = 'sticker'
-        end
-        table.insert(messages, {
+        if v.imageUrl or v.originalContentUrl then type ='image' end
+        if v.stickerId then type = 'sticker' end
+
+        local message = {
             type = type,
             text = stringify.encode(v.text),
             originalContentUrl = v.originalContentUrl or v.imageUrl,
             previewImageUrl = v.previewImageUrl or v.imageUrl,
             stickerId = v.stickerId,
             packageId = v.packageId,
-        })
+        }
+        if message.originalContentUrl then
+            message.originalContentUrl = message.originalContentUrl:gsub('http://', 'https://')
+        end
+        if message.previewImageUrl then
+            message.previewImageUrl = message.previewImageUrl:gsub('http://', 'https://')
+        end
+
+        table.insert(messages, message)
     end
 
     local data = {messages = messages}
