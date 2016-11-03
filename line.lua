@@ -49,15 +49,14 @@ function m.send(args)
         })
     end
 
-    return m.message(
-        args.access_token,
-        message_type,
-        {
-            replyToken = args.replyToken,
-            to = args.to,
-            messages = messages,
-        }
-    )
+    local data = {messages = messages}
+    if args.replyToken then
+        data.replyToken = args.replyToken
+    elseif args.to then
+        data.to = args.to
+    end
+
+    return m.message(args.access_token, message_type, data)
 end
 
 return m
