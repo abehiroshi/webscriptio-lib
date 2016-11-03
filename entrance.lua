@@ -1,16 +1,7 @@
 -- HTTP Request入口
 
 -- ログ初期化
-local _logger = require 'logger'
-local logger = _logger.get('entrance')
-local history = require 'history'
-local loghistory = history.create('log')
-
-_logger.init(function(text)
-    log(text)
-    loghistory:push(text)
-end)
-
+local logger = (require 'logger').get('entrance')
 local memory = require 'memory'
 local dispatcher = require 'dispatcher'
 
