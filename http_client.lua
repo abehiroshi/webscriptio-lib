@@ -10,8 +10,12 @@ function m.request(params)
 
     local response = http.request(params)
 
-    logger.info('request end', response.statuscode)
-    logger.trace('request end', response)
+    if response then
+        logger.info('request end', response.statuscode)
+        logger.trace('request end', response)
+    else
+        logger.info('request end')
+    end
 
     return response
 end

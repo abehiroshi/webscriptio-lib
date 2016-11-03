@@ -6,7 +6,7 @@ hub.add_command('line', function(self, args)
 	args.info = self.store.line.linebot_keys
 	local response, data = line.send(args)
 	local status = ''
-	if response.statuscode ~= 200 then
+	if response and response.statuscode ~= 200 then
 		status = 'error'
 	end
 	return data, status
