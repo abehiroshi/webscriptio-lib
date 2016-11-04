@@ -56,9 +56,9 @@ function m.send(args)
     end
 
     local data = {messages = messages}
-    if args.replyToken then
+    if args.replyToken ~= '' then
         data.replyToken = args.replyToken
-    elseif args.to then
+    elseif args.to ~= '' then
         data.to = args.to
     end
 
