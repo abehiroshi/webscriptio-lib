@@ -28,8 +28,8 @@ function m.send(args)
     logger.trace('send', args)
 
     local message_type = args.message_type
-    if not message_type and args.replyToken then message_type = 'reply' end
-    if not message_type and args.to then message_type = 'push' end
+    if not message_type and args.replyToken ~= '' then message_type = 'reply' end
+    if not message_type and args.to ~= '' then message_type = 'push' end
 
     local messages = {}
     for i,v in ipairs(args.messages or {args}) do
