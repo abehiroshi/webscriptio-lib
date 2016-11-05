@@ -64,8 +64,12 @@ function m:get(args)
     return response
 end
 
-function m.create(self)
-    return setmetatable(self or {}, {__index = m})
+function m.create(self, refresh)
+    local self = setmetatable(self or {}, {__index = m})
+    if refresh == true then
+        self:refresh()
+    end
+    return self
 end
 
 return m
