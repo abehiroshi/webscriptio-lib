@@ -19,7 +19,7 @@ function m:oauth_token(args)
         },
     }
     logger.debug('oauth_token end', response)
-    retuen response
+    return response
 end
 
 
