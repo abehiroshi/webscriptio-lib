@@ -4,7 +4,7 @@ local http_client = require 'http_client'
 
 local m = {}
 
-funcion m:oauth_token(args)
+function m:oauth_token(args)
     logger.info('oauth_token')
     logger.debug(args)
     local response = http_client.request {
