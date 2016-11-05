@@ -66,7 +66,7 @@ end
 
 function m.create(self, refresh)
     local self = setmetatable(self or {}, {__index = m})
-    if refresh == true then
+    if self.refresh_token ~= '' then
         self:refresh()
     end
     return self
