@@ -6,7 +6,9 @@ local m = {}
 
 function m:auth(args)
     logger.info('auth')
-    logger.debug(args)
+    logger.debug(args, self)
+    args = setmetatable(args or {}, {__index = self})
+
     local response = http_client.request {
         url = 'https://api.netatmo.com/oauth2/token',
         method = 'POST',
@@ -24,7 +26,9 @@ end
 
 function m:refresh(args)
     logger.info('refresh')
-    logger.debug(args)
+    logger.debug(args, self)
+    args = setmetatable(args or {}, {__index = self})
+
     local response = http_client.request {
         url = 'https://api.netatmo.com/oauth2/token',
         method = 'POST',
@@ -41,7 +45,9 @@ end
 
 function m:get(args)
     logger.info('get')
-    logger.debug(args)
+    logger.debug(args, self)
+    args = setmetatable(args or {}, {__index = self})
+
     local response = http_client.request {
         url = 'https://api.netatmo.com/api/getstationsdata',
         method = 'POST',
