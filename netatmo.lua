@@ -22,6 +22,12 @@ function m:auth(args)
         },
     }
     logger.debug('auth end', response)
+
+    if response and response.statuscode == 200 then
+        response.content = json.parse(response.content)
+        self.access_token = response.content.access_token
+        self.refresh_token = response.content.refresh_token
+    end
     return response
 end
 
@@ -42,6 +48,11 @@ function m:refresh(args)
         },
     }
     logger.debug('refresh end', response)
+
+    if response and response.statuscode == 200 then
+        response.content = json.parse(response.content)
+        self.access_token = response.content.access_token
+    end
     return response
 end
 
@@ -61,6 +72,10 @@ function m:get(args)
         },
     }
     logger.debug('get end', response)
+
+    if response and response.statuscode == 200 then
+        response.content = json.parse(response.content)
+    end
     return response
 end
 
