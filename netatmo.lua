@@ -24,7 +24,7 @@ end
 
 
 function m.create(self)
-    return setmetatable(self, {__index = m})
+    return setmetatable(self or {}, {__index = m})
 end
 
 return m
