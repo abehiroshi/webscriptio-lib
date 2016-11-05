@@ -39,6 +39,22 @@ function m:refresh(args)
     return response
 end
 
+function m:get(args)
+    logger.info('get')
+    logger.debug(args)
+    local response = http_client.request {
+        url = 'https://api.netatmo.com/api/getstationsdata',
+        method = 'POST',
+        data = {
+            access_token = args.access_token,
+            device_id = args.device_id,
+            get_favorites = args.get_favorites,
+        },
+    }
+    logger.debug('get end', response)
+    return response
+end
+
 function m.create(self)
     return setmetatable(self or {}, {__index = m})
 end
