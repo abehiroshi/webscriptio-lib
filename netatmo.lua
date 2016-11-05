@@ -6,7 +6,8 @@ local m = {}
 
 function m:auth(args)
     logger.info('auth')
-    logger.debug(args, self)
+    logger.debug('get args', args)
+    logger.debug('get self', self)
     args = setmetatable(args or {}, {__index = self})
 
     local response = http_client.request {
@@ -26,7 +27,8 @@ end
 
 function m:refresh(args)
     logger.info('refresh')
-    logger.debug(args, self)
+    logger.debug('get args', args)
+    logger.debug('get self', self)
     args = setmetatable(args or {}, {__index = self})
 
     local response = http_client.request {
@@ -45,7 +47,8 @@ end
 
 function m:get(args)
     logger.info('get')
-    logger.debug(args, self)
+    logger.debug('get args', args)
+    logger.debug('get self', self)
     args = setmetatable(args or {}, {__index = self})
 
     local response = http_client.request {
