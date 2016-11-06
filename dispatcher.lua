@@ -69,9 +69,9 @@ hub.add_command('history_head', function(self, args)
     for i,v in h:elements(args.count) do
     	table.insert(values, v)
     end
-    local status = ''
+    local status
     if #values == 0 then status = 'empty' end
-    return values, status
+    return values, status or args.status
 end)
 
 -- HTTPリクエストを送信
