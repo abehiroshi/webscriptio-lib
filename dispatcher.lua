@@ -65,8 +65,13 @@ end)
 
 hub.add_command('history_head', function(self, args)
     local h = history.create(args.name, args.capacity)
-    local value = h:head(args.offset)
-    return value, ''
+    local values = {}
+    for i,v in h:elements(args.count) do
+    	table.insert(values, v)
+    end
+    local status = ''
+    if #values == 0 then status = 'empty' end
+    return values, status
 end)
 
 -- HTTPリクエストを送信
