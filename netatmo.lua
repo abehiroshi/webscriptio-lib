@@ -1,9 +1,11 @@
+-- netatmo
 
 local logger = (require 'logger').get('netatmo')
 local http_client = require 'http_client'
 
 local m = {}
 
+-- OAuthトークンを取得する
 function m:auth(args)
     logger.info('auth')
     logger.debug('get args', args)
@@ -31,6 +33,7 @@ function m:auth(args)
     return response
 end
 
+-- OAuthトークンを更新する
 function m:refresh(args)
     logger.info('refresh')
     logger.debug('get args', args)
@@ -56,6 +59,7 @@ function m:refresh(args)
     return response
 end
 
+-- stationのデータを取得する
 function m:get(args)
     logger.info('get')
     logger.debug('get args', args)
@@ -79,6 +83,7 @@ function m:get(args)
     return response
 end
 
+-- インスタンスを作成する
 function m.create(self, refresh)
     local self = setmetatable(self or {}, {__index = m})
     if self.refresh_token ~= '' then
