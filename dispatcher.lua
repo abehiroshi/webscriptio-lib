@@ -60,7 +60,7 @@ end)
 hub.add_command('history_push', function(self, args)
     local h = history.create(args.name, args.capacity)
     h:push(args.value)
-    return args.value, ''
+    return args.value, args.status or ''
 end)
 
 hub.add_command('history_head', function(self, args)
