@@ -14,12 +14,14 @@ end
 
 -- 要素を追加する
 function m:push(value)
+    logger.debug('push', self._id, value)
     self._queue:push(value)
     self:adjust()
 end
 
 -- 全ての要素を参照するイテレータ
 function m:elements(max_count)
+    logger.info('elements', self._id, max_count)
     local index = -1
     if type(max_count) == 'number' and max_count > 0 then
         local count = self._queue:count()
@@ -30,6 +32,7 @@ function m:elements(max_count)
 
     return function()
         index = index + 1
+        logger.trace('elements next', self._id, index)
         return self._queue:head(index)
     end
 end
