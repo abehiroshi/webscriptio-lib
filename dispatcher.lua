@@ -71,7 +71,7 @@ hub.add_command('history_head', function(self, args)
     end
     local status
     if #values == 0 then status = 'empty' end
-    return values, status or args.status
+    return values, status or args.status or args.name
 end)
 
 -- HTTPリクエストを送信
