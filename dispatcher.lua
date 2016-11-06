@@ -6,6 +6,7 @@ local stringify = require 'stringify'
 local memory = require 'memory'
 local google = require 'google'
 local filling = require 'filling'
+local history = require 'history'
 local http_client = require 'http_client'
 local hub = require 'hub'
 require 'hub_amazon'
@@ -53,6 +54,13 @@ hub.add_command('memory', function(self, args)
 	end
 
 	return {value = mem.data[args.name]}, args.status or ''
+end)
+
+-- historyに追加
+hub.add_command('history_push', function(self, args)
+    local h = history.create(args.name, args.capacity)
+    h:push(args.value)
+    return args.value, ''
 end)
 
 -- HTTPリクエストを送信
