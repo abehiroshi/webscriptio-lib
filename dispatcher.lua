@@ -31,9 +31,9 @@ hub.add_command('translate', function(self, args)
 				end
 			end
 
-            local name = filling.apply(v.name, result)
-			self.context[name] = result
-			return result, name
+            local status = v.status or result.status or ''
+			self.context[status] = result
+			return result, status
 		end
 	end
 
