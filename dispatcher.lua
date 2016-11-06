@@ -63,6 +63,12 @@ hub.add_command('history_push', function(self, args)
     return args.value, ''
 end)
 
+hub.add_command('history_head', function(self, args)
+    local h = history.create(args.name, args.capacity)
+    local value = h:head(args.offset)
+    return value, ''
+end)
+
 -- HTTPリクエストを送信
 hub.add_command('http', function(self, args)
 	local response = http_client.request(args.request)
