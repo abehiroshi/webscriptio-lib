@@ -66,7 +66,7 @@ end)
 hub.add_command('history_head', function(self, args)
     local h = history.create(args.name, args.capacity)
     local values = {}
-    for i,v in h:elements(args.count) do
+    for v in h:elements(args.count) do
     	table.insert(values, v)
     end
     local status
