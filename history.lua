@@ -2,6 +2,7 @@
 
 local logger = (require 'logger').get('history')
 local queue = require 'queue'
+local stringify = require 'stringify'
 
 local m = {}
 
@@ -14,7 +15,17 @@ end
 
 -- 要素を追加する
 function m:push(value)
-    logger.debug('push', self._id, value)
+    logger.info('push', self._id)
+    logger.debug('push', value)
+
+    if self._options.unique then
+        local head = self._queue:head()
+        if head and stringify.encode(value) == stringify.encode(head) then
+            logger.info('push skip')
+            return
+        end
+    end
+
     self._queue:push(value)
     self:adjust()
 end
