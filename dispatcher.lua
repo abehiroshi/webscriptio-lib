@@ -58,12 +58,7 @@ end)
 
 -- historyに追加
 hub.add_command('history_push', function(self, args)
-    local h = history.create(
-        args.name,
-        {
-            capacity = args.capacity,
-        }
-    )
+    local h = history.create(args.name, args.options)
     if args.type ~= '' then
         args.value = stringify.decode(args.type, args.value)
     end
@@ -73,7 +68,7 @@ end)
 
 -- historyを参照
 hub.add_command('history_head', function(self, args)
-    local h = history.create(args.name)
+    local h = history.create(args.name, args.options)
     local values = {}
     for v in h:elements(args.count) do
     	table.insert(values, v)
@@ -85,7 +80,7 @@ end)
 
 -- historyをクリア
 hub.add_command('history_clear', function(self, args)
-    local h = history.create(args.name)
+    local h = history.create(args.name, args.options)
 	h:clear()
 	return args.name, ''
 end)
