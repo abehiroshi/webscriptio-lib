@@ -7,7 +7,7 @@ local m = {}
 
 -- 容量以内に要素の数を調整する
 function m:adjust()
-    while self._queue:count() > self._capacity do
+    while self._queue:count() > (self._options.capacity or 1000) do
        self._queue:pop()
     end
 end
@@ -43,11 +43,11 @@ function m:clear()
 end
 
 -- 履歴を作成
-function m.create(name, capacity)
+function m.create(name, options)
     local self = {}
     self._id = 'history/'..name
     self._queue = queue.create(self._id)
-    self._capacity = capacity or 100
+    self._options = options or {}
     return setmetatable(self, {__index = m})
 end
 

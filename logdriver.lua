@@ -11,7 +11,9 @@ function m.load(memory_name)
 
     local hist = history.create(
         config.history_name or 'log',
-        config.history_capacity or 1000
+        {
+            capacity = config.history_capacity,
+        }
     )
     logger.init(function(text)
         log(text)
