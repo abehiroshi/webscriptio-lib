@@ -37,6 +37,11 @@ function m:elements(max_count)
     end
 end
 
+-- 履歴をクリア
+function m:clear()
+    self._queue:clear()
+end
+
 -- 履歴を作成
 function m.create(name, capacity)
     local self = {}
