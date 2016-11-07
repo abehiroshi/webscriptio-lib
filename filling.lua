@@ -1,5 +1,7 @@
 -- テンプレートエンジン
 
+local stringify = require 'stringify'
+
 local m = {}
 
 -- テンプレート適用関数 デフォルトは何もしない
@@ -14,6 +16,9 @@ end
 
 -- テンプレート文字列にパラメータを適用する
 function m.apply(text, args)
+    if not args['$tostring'] then
+        args['$tostring'] = stringify.encode
+    end
     return filler(text, args)
 end
 
