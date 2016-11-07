@@ -59,6 +59,9 @@ end)
 -- historyに追加
 hub.add_command('history_push', function(self, args)
     local h = history.create(args.name, args.capacity)
+    if args.type ~= '' then
+        args.value = stringify.decode(args.value, args.type)
+    end
     h:push(args.value)
     return args.value, args.status or ''
 end)
