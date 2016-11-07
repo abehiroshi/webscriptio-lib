@@ -63,8 +63,9 @@ hub.add_command('history_push', function(self, args)
     return args.value, args.status or ''
 end)
 
+-- historyを参照
 hub.add_command('history_head', function(self, args)
-    local h = history.create(args.name, args.capacity)
+    local h = history.create(args.name)
     local values = {}
     for v in h:elements(args.count) do
     	table.insert(values, v)
@@ -72,6 +73,13 @@ hub.add_command('history_head', function(self, args)
     local status
     if #values == 0 then status = 'empty' end
     return values, status or args.status or args.name
+end)
+
+-- historyをクリア
+hub.add_command('history_clear', function(self, args)
+    local h = history.create(args.name)
+	h:clear()
+	return args.name, ''
 end)
 
 -- HTTPリクエストを送信
