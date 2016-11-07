@@ -2,6 +2,8 @@
 
 local m = {}
 
+local ignore = false
+
 -- ログ出力関数
 local logger = function(text)
     log(text)
@@ -38,6 +40,8 @@ end
 
 function writer(category)
     return function(_level, ...)
+        if ignore then return end
+
         local text = os.date("!%Y/%m/%d %H:%M:%S", os.time() + 9*60*60)..'['..category..']['.._level..']'
         for i,v in ipairs({...}) do
             if type(v) == 'table' then
@@ -51,7 +55,10 @@ function writer(category)
                 text = text..' '..tostring(v)
             end
         end
-        logger(text)
+
+        ignore = true
+        pcall(logger, text, category, _level)
+        ignore = false
     end
 end
 
