@@ -42,7 +42,7 @@ function writer(category)
     return function(_level, ...)
         if ignore then return end
 
-        local text = os.date("!%Y/%m/%d %H:%M:%S", os.time() + 9*60*60)..'('..os.clock()..')'..'['..category..']['.._level..']'
+        local text = os.date("!%Y/%m/%d %H:%M:%S", os.time() + 9*60*60)..'('..os.time()..')'..'['..category..']['.._level..']'
         for i,v in ipairs({...}) do
             if type(v) == 'table' then
                 text = text..' '..json.stringify(v):gsub('\\"','"'):gsub(
