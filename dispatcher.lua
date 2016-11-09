@@ -78,6 +78,18 @@ hub.add_command('history_head', function(self, args)
     return values, status or args.status or args.name
 end)
 
+-- historyを逆順に参照
+hub.add_command('history_last', function(self, args)
+    local h = history.create(args.name, args.options)
+    local values = {}
+    for v in h:elements(args.count, true) do
+    	table.insert(values, v)
+    end
+    local status
+    if #values == 0 then status = 'empty' end
+    return values, status or args.status or args.name
+end)
+
 -- historyをクリア
 hub.add_command('history_clear', function(self, args)
     local h = history.create(args.name, args.options)

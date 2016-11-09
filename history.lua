@@ -19,9 +19,9 @@ function m:push(value)
     logger.debug('push', value)
 
     if self._options.unique then
-        local head = self._queue:head()
-        logger.trace('push unique head', head)
-        if head and stringify.encode(value) == stringify.encode(head) then
+        local last = self._queue:last()
+        logger.trace('push compare to', last)
+        if head and stringify.encode(value) == stringify.encode(last) then
             logger.info('push skip')
             return
         end
@@ -32,7 +32,7 @@ function m:push(value)
 end
 
 -- 全ての要素を参照するイテレータ
-function m:elements(max_count)
+function m:elements(max_count, reverse)
     logger.info('elements', self._id, max_count)
     local index = -1
     if type(max_count) == 'number' and max_count > 0 then
@@ -45,7 +45,11 @@ function m:elements(max_count)
     return function()
         index = index + 1
         logger.trace('elements next', self._id, index)
-        return self._queue:head(index)
+        if reverse == true then
+            return self._queue:last(index)
+        else
+            return self._queue:head(index)
+        end
     end
 end
 
