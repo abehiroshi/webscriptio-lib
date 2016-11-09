@@ -62,8 +62,12 @@ hub.add_command('history_push', function(self, args)
     if args.type ~= '' then
         args.value = stringify.decode(args.type, args.value)
     end
-    h:push(args.value)
-    return args.value, args.status or ''
+    local success = h:push(args.value)
+    local status = ''
+    if success == true then
+    	status = args.status or args.name
+	end
+    return args.value, status
 end)
 
 -- historyを参照

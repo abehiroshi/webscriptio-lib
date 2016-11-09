@@ -23,12 +23,13 @@ function m:push(value)
         logger.trace('push compare to', last)
         if last and stringify.encode(value) == stringify.encode(last) then
             logger.info('push skip')
-            return
+            return false
         end
     end
 
     self._queue:push(value)
     self:adjust()
+    return true
 end
 
 -- 全ての要素を参照するイテレータ
