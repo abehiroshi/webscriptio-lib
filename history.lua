@@ -20,6 +20,7 @@ function m:push(value)
 
     if self._options.unique then
         local head = self._queue:head()
+        logger.trace('push unique head', head)
         if head and stringify.encode(value) == stringify.encode(head) then
             logger.info('push skip')
             return
