@@ -55,6 +55,7 @@ end
 
 -- 履歴を作成
 function m.create(name, options)
+    logger.debug('create', name, options)
     local self = {}
     self._id = 'history/'..name
     self._queue = queue.create(self._id)
