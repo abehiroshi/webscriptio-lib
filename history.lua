@@ -21,7 +21,7 @@ function m:push(value)
     if self._options.unique then
         local last = self._queue:last()
         logger.trace('push compare to', last)
-        if head and stringify.encode(value) == stringify.encode(last) then
+        if last and stringify.encode(value) == stringify.encode(last) then
             logger.info('push skip')
             return
         end
