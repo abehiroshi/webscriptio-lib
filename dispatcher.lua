@@ -41,6 +41,18 @@ hub.add_command('translate', function(self, args)
 	return result, 'nomatch'
 end)
 
+-- hub登録：式を評価
+hub.add_command('expression', function(self, args)
+    for i,v in ipairs(args.expressions) do
+        local num = tonumber(args.values[v.apply.var])
+        local comp = tonumber(v.apply['>'])
+        if comp and num > comp then
+            return args.values, v.status
+        end
+    end
+    return args.values, ''
+end)
+
 -- hub登録：memoryに登録
 hub.add_command('memory', function(self, args)
 	local mem = memory.create(args.memory_name)
