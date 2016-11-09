@@ -56,9 +56,9 @@ function m.send(args)
     end
 
     local data = {messages = messages}
-    if message_type = 'reply' then
+    if message_type == 'reply' then
         data.replyToken = args.replyToken
-    elseif message_type = 'push' then
+    elseif message_type == 'push' then
         data.to = args.to
     end
 
