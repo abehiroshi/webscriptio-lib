@@ -34,18 +34,16 @@ end
 
 -- 全ての要素を参照するイテレータ
 function m:elements(max_count, reverse)
-    logger.info('elements', self._id, max_count)
+    logger.info('elements', self._id, max_count, reverse)
     local index = -1
-    if type(max_count) == 'number' and max_count > 0 then
-        local count = self._queue:count()
-        if max_count < count then
-            index = index + count - max_count
-        end
-    end
 
     return function()
         index = index + 1
-        logger.trace('elements next', self._id, index)
+        if max_count and index >= tonumber(max_count) then
+            return
+        end
+
+        logger.trace('elements next', index)
         if reverse == true then
             return self._queue:last(index)
         else
