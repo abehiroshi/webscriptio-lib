@@ -45,8 +45,20 @@ end)
 hub.add_command('expression', function(self, args)
     for i,v in ipairs(args.expressions) do
         local num = tonumber(args.values[v.apply.var])
-        local comp = tonumber(v.apply['>'])
-        if comp and num > comp then
+        local comp = v.apply['>']
+        if comp and num > tonumber(comp) then
+            return args.values, v.status
+        end
+        comp = v.apply['<']
+        if comp and num < tonumber(comp) then
+            return args.values, v.status
+        end
+        comp = v.apply['<=']
+        if comp and num <= tonumber(comp) then
+            return args.values, v.status
+        end
+        comp = v.apply['>=']
+        if comp and num >= tonumber(comp) then
             return args.values, v.status
         end
     end
