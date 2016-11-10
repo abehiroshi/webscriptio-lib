@@ -103,7 +103,7 @@ hub.add_command('history_head', function(self, args)
     end
     local status
     if #values == 0 then status = 'empty' end
-    return values, status or args.status or args.name
+    return {values = values, count = h:count()}, status or args.status or args.name
 end)
 
 -- historyを逆順に参照
@@ -115,7 +115,7 @@ hub.add_command('history_last', function(self, args)
     end
     local status
     if #values == 0 then status = 'empty' end
-    return values, status or args.status or args.name
+    return {values = values, count = h:count()}, status or args.status or args.name
 end)
 
 -- historyをクリア
