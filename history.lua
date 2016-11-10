@@ -52,6 +52,11 @@ function m:elements(max_count, reverse)
     end
 end
 
+-- 履歴の件数
+function m:count()
+    return self._queue:count()
+end
+
 -- 履歴をクリア
 function m:clear()
     self._queue:clear()

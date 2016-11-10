@@ -91,7 +91,7 @@ hub.add_command('history_push', function(self, args)
     if success == true then
     	status = args.status or args.name
 	end
-    return args.value, status
+    return {value = args.value, count = h:count()}, status
 end)
 
 -- historyを参照
