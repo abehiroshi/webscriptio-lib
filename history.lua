@@ -33,8 +33,8 @@ function m:push(value)
 end
 
 -- 全ての要素を参照するイテレータ
-function m:elements(max_count, reverse)
-    logger.info('elements', self._id, max_count, reverse)
+function m:elements(options)
+    logger.info('elements', self._id, options)
     options = options or {}
     local start = options.start
     local max_count = tonumber(options.max_count or 0)
