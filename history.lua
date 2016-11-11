@@ -52,7 +52,7 @@ function m:elements(options)
             if count >= max_count then
                 return
             elseif reverse == true then
-                index = count - index - 1
+                index = max_count - index - 1
             end
         end
 
