@@ -61,6 +61,10 @@ hub.add_command('expression', function(self, args)
         if comp and num >= tonumber(comp) then
             return args.values, v.status
         end
+        comp = v.apply['=']
+        if comp and num == tonumber(comp) then
+            return args.values, v.status
+        end
     end
     return args.values, ''
 end)
