@@ -36,7 +36,7 @@ end
 function m:elements(options)
     logger.info('elements', self._id, options)
     options = options or {}
-    local start = options.start
+    local start = options.start or 'head'
     local max_count = tonumber(options.max_count or 0)
     local reverse = options.reverse
     if max_count > self:count() then
