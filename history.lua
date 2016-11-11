@@ -72,6 +72,7 @@ end
 
 -- 履歴をクリア
 function m:clear()
+    logger.info('clear', self._id)
     self._queue:clear()
 end
 
