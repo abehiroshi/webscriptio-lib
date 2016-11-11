@@ -95,22 +95,10 @@ hub.add_command('history_push', function(self, args)
 end)
 
 -- historyを参照
-hub.add_command('history_head', function(self, args)
+hub.add_command('history_list', function(self, args)
     local h = history.create(args.name, args.options)
     local values = {}
-    for v in h:elements(args.count) do
-    	table.insert(values, v)
-    end
-    local status
-    if #values == 0 then status = 'empty' end
-    return {values = values, count = h:count()}, status or args.status or args.name
-end)
-
--- historyを逆順に参照
-hub.add_command('history_last', function(self, args)
-    local h = history.create(args.name, args.options)
-    local values = {}
-    for v in h:elements(args.count, true) do
+    for v in h:elements(args) do
     	table.insert(values, v)
     end
     local status
