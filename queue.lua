@@ -93,7 +93,7 @@ end
 -- キューを作成
 function m.create(name)
     local self = {}
-    if name then
+    if name and name ~= '' then
         local id = 'queue/'..name
         self._share = true
         self._id = id

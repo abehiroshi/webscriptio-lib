@@ -82,7 +82,11 @@ end
 function m.create(name, args)
     local self = setmetatable(args or {}, {__index = m})
     self.listeners = {}
-    self.requests = queue.create('hub/requests/'..name)
+
+    if name and name ~= '' then
+        name = 'hub/requests/'..name
+    end
+    self.requests = queue.create(name)
     return self
 end
 
