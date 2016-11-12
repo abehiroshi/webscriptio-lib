@@ -6,6 +6,7 @@ local memory = require 'memory'
 
 local m = {}
 
+-- ログ設定を読み込み初期化する
 function m.load(memory_name)
     local config = memory.create(memory_name).data
 
@@ -26,6 +27,25 @@ function m.load(memory_name)
     end
 
     return m
+end
+
+-- ログを表示用のHTMLを作成する
+function m.view(args)
+    args = args or {}
+
+    local loghistory = history.create(args.history_name or 'log')
+    local options = {
+        max_count = args.max_count or 100,
+        start = 'last',
+        reverse = true,
+    }
+
+    local result = {}
+    for v in loghistory:elements(options) do
+    	table.insert(result, v)
+    end
+    return '<div>'..table.concat(result, '</div><div>')..'</div>',
+            {['Content-Type']='text/html; charset=UTF-8'}
 end
 
 return m
