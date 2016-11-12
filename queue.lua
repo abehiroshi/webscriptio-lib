@@ -65,7 +65,7 @@ function m:_clear()
 	if self._share then
 	    self._memory:clear()
 	else
-	    self._memory = {data={}, clear=function(self) self.data={} end}}
+	    self._memory = {data={}, clear=function(self) self.data={} end}
 	end
 end
 
@@ -99,7 +99,7 @@ function m.create(name)
         self._id = id
         self._memory = memory.create(id)
     else
-        self._memory = {data={}, clear=function(self) self.data={} end}}
+        self._memory = {data={}, clear=function(self) self.data={} end}
     end
 
     return setmetatable(self, {__index = m})
