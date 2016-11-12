@@ -33,6 +33,7 @@ end
 function m.view(args)
     args = args or {}
 
+    logger.level(args.log_level or 'TRACE')
     local loghistory = history.create(args.history_name or 'log')
     local options = {
         max_count = args.max_count or 100,
