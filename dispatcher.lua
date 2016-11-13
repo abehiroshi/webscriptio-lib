@@ -47,23 +47,23 @@ hub.add_command('expression', function(self, args)
         local num = tonumber(args.values[v.apply.var])
         local comp = v.apply['>']
         if comp and num > tonumber(comp) then
-            return args.values, v.status
+            return {v.status=args.values}, v.status
         end
         comp = v.apply['<']
         if comp and num < tonumber(comp) then
-            return args.values, v.status
+            return {v.status=args.values}, v.status
         end
         comp = v.apply['<=']
         if comp and num <= tonumber(comp) then
-            return args.values, v.status
+            return {v.status=args.values}, v.status
         end
         comp = v.apply['>=']
         if comp and num >= tonumber(comp) then
-            return args.values, v.status
+            return {v.status=args.values}, v.status
         end
         comp = v.apply['=']
         if comp and num == tonumber(comp) then
-            return args.values, v.status
+            return {v.status=args.values}, v.status
         end
     end
     return args.values, ''
