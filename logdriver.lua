@@ -8,6 +8,7 @@ local m = {}
 
 -- ログ設定を読み込み初期化する
 function m.load(memory_name)
+    logger.info('load', memory_name)
     local config = memory.create(memory_name).data
 
     local hist = history.create(
@@ -31,6 +32,7 @@ end
 
 -- ログを表示用のHTMLを作成する
 function m.view(args)
+    logger.info('view', args)
     args = args or {}
 
     logger.level(args.log_level or 'TRACE')
@@ -44,6 +46,7 @@ function m.view(args)
     local result = {}
     for v in loghistory:elements(options) do
     	table.insert(result, v)
+        logger.trace(v)
     end
     return '<div>'..table.concat(result, '</div><div>')..'</div>',
             {['Content-Type']='text/html; charset=UTF-8'}
