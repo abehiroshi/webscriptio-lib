@@ -113,8 +113,12 @@ end)
 -- historyをクリア
 hub.add_command('history_clear', function(self, args)
     local h = history.create(args.name, args.options)
-	h:clear()
-	return args.name, ''
+    local status = ''
+    if h:count() > 0 then
+        status = args.status or args.name
+        h:clear()
+    end
+	return args.name, status
 end)
 
 -- HTTPリクエストを送信
