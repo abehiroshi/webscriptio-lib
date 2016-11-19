@@ -28,6 +28,7 @@ function m.load(memory_name)
         _logger.level(v, k)
     end
 
+    logger.debug(memory.create(memory_name):dump())
     return m
 end
 
