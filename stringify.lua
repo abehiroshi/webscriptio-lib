@@ -2,17 +2,23 @@
 
 local m = {}
 
+local unicode_cache = {}
+
 -- 型変換用の関数
 local converters = {
 	table = {
 		encode = function(t)
-			local s = json.stringify(t):gsub(
+			return json.stringify(t):gsub(
 				'\\u[0-9a-f][0-9a-f][0-9a-f][0-9a-f]',
 				function(s)
-					return json.parse('"'..s..'"')
+                    local ret = unicode_cache[s]
+                    if not ret then
+                        ret = json.parse('"'..s..'"')
+                        unicode_cache[s] = ret
+                    end
+                    return ret
 				end
             )
-			return s
 		end,
 		decode = json.parse,
 	},
