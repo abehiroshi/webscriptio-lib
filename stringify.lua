@@ -1,8 +1,10 @@
 -- 文字列化
 
+local cache = require 'cache'
+
 local m = {}
 
-local unicode_cache = {}
+local unicode_cache = cache.get('unicode_decode')
 
 -- 型変換用の関数
 local converters = {
