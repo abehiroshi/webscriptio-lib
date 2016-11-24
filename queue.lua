@@ -51,13 +51,7 @@ end
 
 -- キューの件数
 function m:count()
-    self:acquire('pop')
-	self:acquire('push')
-	local ret = (self._memory.data.count or 0) - (self._memory.data.head or 1) + 1
-	self:release('push')
-    self:release('pop')
-
-    return ret
+	return (self._memory.data.count or 0) - (self._memory.data.head or 1) + 1
 end
 
 -- memoryをクリア
