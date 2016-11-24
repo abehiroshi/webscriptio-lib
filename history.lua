@@ -42,6 +42,7 @@ function m:elements(options)
     if max_count > self:count() then
         max_count = self:count()
     end
+    logger.debug('elements', start, reverse, max_count)
 
     local count = -1
     return function()
