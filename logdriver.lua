@@ -50,6 +50,11 @@ function m.view(args)
     	table.insert(result, v)
         logger.trace(v)
     end
+
+    if args.clear == 'true' then
+        loghistory:clear()
+    end
+
     return '<div>'..table.concat(result, '</div><div>')..'</div>',
             {['Content-Type']='text/html; charset=UTF-8'}
 end
