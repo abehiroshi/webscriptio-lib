@@ -1,7 +1,10 @@
 -- ログ出力
 
+local cache = require 'cache'
+
 local m = {}
 
+local unicode_cache = cache.get('unicode_decode')
 local ignore = false
 
 -- ログ出力関数
@@ -48,7 +51,12 @@ function writer(category)
                 text = text..' '..json.stringify(v):gsub('\\"','"'):gsub(
                     '\\u[0-9a-f][0-9a-f][0-9a-f][0-9a-f]',
                     function(s)
-                        return json.parse('"'..s..'"')
+                        local ret = unicode_cache[s]
+                        if not ret then
+                            ret = json.parse('"'..s..'"')
+                            unicode_cache[s] = ret
+                        end
+                        return ret
                     end
                 )
             else
