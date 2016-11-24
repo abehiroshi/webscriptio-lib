@@ -5,33 +5,33 @@ local m = {}
 local memory = require 'memory'
 
 -- キュー操作をロック
-function m:acquire(key)
-    if self._share then
-        lease.acquire(self._id..'/'..key)
+function m:acquire()
+    if self._id then
+        lease.acquire(self._id)
     end
 end
 
 -- キュー操作のロック解除
-function m:release(key)
-    if self._share then
-        lease.release(self._id..'/'..key)
+function m:release()
+    if self._id then
+        lease.release(self._id)
     end
 end
 
 -- キューに追加
 function m:push(value)
-	self:acquire('push')
+	self:acquire()
 
 	local counter = (self._memory.data.count or 0) + 1
 	self._memory.data.count = counter
 	self._memory.data[counter] = value
 
-	self:release('push')
+	self:release()
 end
 
 -- キューから取り出し
 function m:pop()
-	self:acquire('pop')
+	self:acquire()
 
 	local header = self._memory.data.head or 1
 	local ret = self._memory.data[header]
@@ -40,12 +40,10 @@ function m:pop()
 		self._memory.data.head = header + 1
 	else
 		-- 何もなければmemoryをクリア
-    	self:acquire('push')
         self:_clear()
-    	self:release('push')
 	end
 
-	self:release('pop')
+	self:release()
 	return ret
 end
 
@@ -56,7 +54,7 @@ end
 
 -- memoryをクリア
 function m:_clear()
-	if self._share then
+	if self._id then
 	    self._memory:clear()
 	else
 	    self._memory = {data={}, clear=function(self) self.data={} end}
@@ -65,11 +63,9 @@ end
 
 -- キューをクリア
 function m:clear()
-    self:acquire('pop')
-	self:acquire('push')
+    self:acquire()
     self:_clear()
-	self:release('push')
-    self:release('pop')
+    self:release()
 end
 
 -- 先頭の要素を参照
@@ -88,10 +84,8 @@ end
 function m.create(name)
     local self = {}
     if name and name ~= '' then
-        local id = 'queue/'..name
-        self._share = true
-        self._id = id
-        self._memory = memory.create(id)
+        self._id = 'queue/'..name
+        self._memory = memory.create(self._id)
     else
         self._memory = {data={}, clear=function(self) self.data={} end}
     end
