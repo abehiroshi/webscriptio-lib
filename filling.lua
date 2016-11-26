@@ -17,7 +17,7 @@ end
 
 -- テンプレート文字列にパラメータを適用する
 function m.apply(text, args)
-    logger.debug('apply', text, args)
+    logger.trace('apply', text, args)
     if not args['$tostring'] then
         args['$tostring'] = stringify.encode
     end
