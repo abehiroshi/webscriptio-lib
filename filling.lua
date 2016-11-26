@@ -1,5 +1,6 @@
 -- テンプレートエンジン
 
+local logger = (require 'logger').get('filling')
 local stringify = require 'stringify'
 
 local m = {}
@@ -16,6 +17,7 @@ end
 
 -- テンプレート文字列にパラメータを適用する
 function m.apply(text, args)
+    logger.debug('apply', text, args)
     if not args['$tostring'] then
         args['$tostring'] = stringify.encode
     end
