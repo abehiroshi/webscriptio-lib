@@ -12,11 +12,16 @@ function m:receive(clear)
 		params.clear = '1'
 	end
 
-	return http_client.request {
+	local response = http_client.request {
 		url = "https://api.getirkit.com/1/messages",
 		method = "GET",
 		params = params,
 	}
+
+    if response and response.statuscode == 200 then
+        response.content = json.parse(response.content)
+    end
+    return response
 end
 
 -- IRKit Internet HTTP APIにPOST messagesを送信する

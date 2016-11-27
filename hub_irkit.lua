@@ -9,7 +9,7 @@ hub.add_command('irkit_receive', function(self, args)
 	if response.statuscode ~= 200 then
 		status = 'error'
 	end
-	return response, status
+	return response.content, status
 end)
 
 -- IRKit送信
