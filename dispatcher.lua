@@ -142,7 +142,7 @@ function hub_default(self, event)
 	local command = self._listeners[key]
 	if command then
 		command = util.table_convert(command, function(value)
-			if type(value) == 'string' then
+			if type(value) == 'string' and value:find('{{') then
 				return filling.apply(value, {
 					event = event,
 					context = self.context,
