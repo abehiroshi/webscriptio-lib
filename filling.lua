@@ -17,11 +17,15 @@ end
 
 -- テンプレート文字列にパラメータを適用する
 function m.apply(text, args)
-    logger.trace('apply', text, args)
+    logger.debug('apply start', text)
+    logger.trace(args)
     if not args['$tostring'] then
         args['$tostring'] = stringify.encode
     end
-    return filler(text, args)
+
+    local ret =  filler(text, args)
+    logger.debug('apply end', ret)
+    return ret
 end
 
 return m
