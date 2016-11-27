@@ -68,7 +68,7 @@ function writer(category)
         local ok, message = pcall(logger, text, category, _level)
         ignore = false
         if not ok then
-            log('[ERROR]'..message)
+            log('[ERROR]log '..message)
             log(text)
         end
     end
@@ -78,7 +78,13 @@ end
 function m.get(category)
     category = category or ''
 
-    local write = writer(category)
+    local writer_category = writer(category)
+    local write = function(...)
+        local ok, message = pcall(writer_category, ...)
+        if not ok then
+            log('[ERROR]write', ...)
+        end
+    end
     local is_info  = judge_level(category, levels.INFO)
     local is_debug = judge_level(category, levels.DEBUG)
     local is_trace = judge_level(category, levels.TRACE)
