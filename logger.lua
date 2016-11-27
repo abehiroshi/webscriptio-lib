@@ -65,8 +65,12 @@ function writer(category)
         end
 
         ignore = true
-        pcall(logger, text, category, _level)
+        local ok, message = pcall(logger, text, category, _level)
         ignore = false
+        if not ok then
+            log('[ERROR]'..message)
+            log(text)
+        end
     end
 end
 
