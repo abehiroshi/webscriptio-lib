@@ -33,7 +33,7 @@ function m.create(dispatcher_name, listener_name, store_name)
     logger.info('create', dispatcher_name, listener_name, store_name)
     local d = dispatcher.create(dispatcher_name, {
         listeners = memory.create(listener_name).data,
-        store = memory.create(store_name).data,
+        store = memory.create(store_name):dump(),
         context = {},
     })
     return setmetatable({_dispatcher = d}, {__index = m})
