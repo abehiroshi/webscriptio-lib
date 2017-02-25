@@ -22,7 +22,7 @@ local m = {}
 hub.add_command('translate', function(self, args)
 	local result = {text = args.text}
 	for i,v in ipairs(args.patterns) do
-		matched = {string.match(args.text, string.regexp(v.pattern))}
+		matched = {string.match(args.text, v.pattern)}
 		if #matched > 0 then
 			for j,s in ipairs(matched) do
 				if v.keys and v.keys[j] then
