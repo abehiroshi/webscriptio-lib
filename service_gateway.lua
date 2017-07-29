@@ -9,7 +9,7 @@ local m = {}
 
 local services = {
     line = {
-        push = function(params, store){
+        push = function(params, store)
             params.access_token = store.line.access_token
 	        local response = line.send(params)
             if response.statuscode ~= 200 then
@@ -17,11 +17,11 @@ local services = {
             else
                 return 'ok'
 	        end
-        }
+        end
     }
 }
  
-function m:execute(method, params){
+function m:execute(method, params)
     local service = services[self.name]
     if not service then
         logger.info('service not found', self.name)
@@ -36,10 +36,10 @@ function m:execute(method, params){
     local store = memory.create(self.store_name or 'config'):dump()
 
     return service[method](params, store)
-}
+end
 
-function m.create(args){
+function m.create(args)
     return setmetatable(args or {}, {__index = m})
-}
+end
 
 return m
