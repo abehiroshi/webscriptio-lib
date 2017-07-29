@@ -25,7 +25,7 @@ function m:execute(request)
     local method = request.body.method
     local gateway = gateway.create()
 
-    local ok, result = pcall(gateway:execute, gateway, method, params)
+    local ok, result = pcall(gateway.execute, gateway, method, params)
     if not ok then
         logger.error(result)
     end
