@@ -15,7 +15,8 @@ function m:execute(request)
     local params = {}
     if type(request.query) == 'table' then
         params = request.query
-    elseif request.body then
+    end
+    if request.body then
         local result, body = pcall(json.parse, request.body)
         if result and type(body) == 'table' then
             logger.trace('entry json.parse', body)
