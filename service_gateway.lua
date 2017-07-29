@@ -11,6 +11,9 @@ local services = {}
 
 function services.line_push(params, store)
     params.access_token = params.access_token or store.line.access_token
+    if not params.to and not params.reply_token then
+        params.to = store.line.my_mid
+    end
 	local response = line.send(params)
     if response.statuscode ~= 200 then
 		return {result = 'error', statuscode = response.statuscode}
