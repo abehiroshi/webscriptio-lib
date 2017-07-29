@@ -8,9 +8,9 @@ local m = {}
 
 -- Message API 送信
 function m.message(access_token, message_type, data)
-    logger.trace('message', access_token)
-    logger.info('message', message_type)
-    logger.debug('message', data)
+    logger.trace('message access_token:', access_token)
+    logger.info('message message_type:', message_type)
+    logger.debug('args', data)
 
     return http_client.request {
         url = 'https://api.line.me/v2/bot/message/'..message_type,
