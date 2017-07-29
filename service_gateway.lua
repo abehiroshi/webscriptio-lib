@@ -19,7 +19,8 @@ function services.line_push(params, store)
 	end
 end
  
-function m:execute(params)
+function m.execute(params)
+    logger.debug('params', params)
     local service = services[params.service_method]
     if not service then
         logger.info('service is not found', params.service_method)
@@ -29,10 +30,6 @@ function m:execute(params)
     local store = memory.create(self.store_name or 'config'):dump()
 
     return service(params, store)
-end
-
-function m.create(args)
-    return setmetatable(args or {}, {__index = m})
 end
 
 return m

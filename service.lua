@@ -9,7 +9,7 @@ local m = {}
 -- HTTP Requestを受信
 function m:execute(request)
     logger.info('service start')
-    logger.debug('service', request)
+    logger.debug('request', request)
 
     local params = {}
     if request and request.body then
@@ -22,9 +22,7 @@ function m:execute(request)
         end
     end
 
-    local gateway = gateway.create()
-
-    local ok, result = pcall(gateway.execute, gateway, params)
+    local ok, result = pcall(gateway.execute, params)
     if not ok then
         logger.error(result)
     end
