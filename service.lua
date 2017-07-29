@@ -17,7 +17,7 @@ function m:execute(request)
         if result and type(body) == 'table' then
             logger.trace('entry json.parse', body)
             params = body
-        else if type(request.query) == 'table' then
+        elseif type(request.query) == 'table' then
             params = request.query
         end
     end
