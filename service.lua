@@ -35,8 +35,8 @@ function m:execute(request)
     return result
 end
 
-function m.create(args){
+function m.create(args)
     return setmetatable(args or {}, {__index = m})
-}
+end
 
 return m
