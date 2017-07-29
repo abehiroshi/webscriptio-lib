@@ -10,15 +10,16 @@ local m = {}
 function m:execute(request)
     logger.info('service start')
     logger.debug('request', request)
+    if not request then return {} end
 
     local params = {}
-    if request and request.body then
+    if type(request.query) == 'table' then
+        params = request.query
+    elseif request.body then
         local result, body = pcall(json.parse, request.body)
         if result and type(body) == 'table' then
             logger.trace('entry json.parse', body)
             params = body
-        elseif type(request.query) == 'table' then
-            params = request.query
         end
     end
 
