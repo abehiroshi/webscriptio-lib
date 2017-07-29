@@ -27,7 +27,7 @@ function m.execute(params)
         return {result = 'service is not found'}
     end
 
-    local store = memory.create(self.store_name or 'config'):dump()
+    local store = memory.create(params.store_name or 'config'):dump()
 
     return service(params, store)
 end
